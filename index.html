@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#171715">
+<meta name="description" content="Portfolio d'artiste — peintures originales, matière, couleur et émotion.">
+<title>Atelier — Portfolio d'artiste</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#171715;--paper:#f3f0e9;--muted:#8b887f;--line:rgba(23,23,21,.16);--serif:"Playfair Display",Georgia,serif;--sans:"DM Sans",Arial,sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}a{color:inherit;text-decoration:none}button{font:inherit}.topbar{height:76px;padding:0 5vw;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);position:absolute;z-index:5;top:0;left:0;right:0;color:#f7f4ec}.brand{font-size:13px;letter-spacing:.22em;font-weight:700}.brand span{font-weight:400;opacity:.65}.nav{display:flex;gap:34px;font-size:10px;letter-spacing:.17em;text-transform:uppercase}.nav a{opacity:.8;transition:opacity .2s}.nav a:hover{opacity:1}.menu{display:none;background:none;border:0;color:inherit;font-size:22px}
+.hero{min-height:92vh;background:#171715;color:#f3f0e9;position:relative;display:flex;align-items:flex-end;overflow:hidden;padding:150px 8vw 8vh}.hero:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 72% 38%,rgba(174,145,104,.22),transparent 36%),linear-gradient(115deg,#171715 10%,#24221e 62%,#171715);}.hero:after{content:"";position:absolute;width:44vw;height:58vh;right:12vw;top:18vh;border:1px solid rgba(243,240,233,.23);transform:rotate(-7deg);box-shadow:0 30px 100px #0008;background:linear-gradient(145deg,rgba(255,255,255,.08),transparent 40%),repeating-linear-gradient(135deg,transparent 0 16px,rgba(255,255,255,.018) 17px 18px)}.hero-art{position:absolute;right:17vw;top:21vh;width:32vw;height:49vh;transform:rotate(-7deg);background:linear-gradient(140deg,#b5a18b 0%,#4d5149 26%,#c1a47e 48%,#262b29 70%,#a78e72 100%);box-shadow:0 35px 90px #0009;overflow:hidden}.hero-art:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 28% 32%,#e4d6bf 0 5%,transparent 32%),radial-gradient(ellipse at 70% 62%,#242b27 0 14%,transparent 43%),linear-gradient(35deg,transparent 35%,#d5c1a2 36% 39%,transparent 40%);mix-blend-mode:soft-light}.hero-copy{position:relative;z-index:2;max-width:760px}.eyebrow{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:#c5b9a5}.hero h1{font:500 clamp(56px,9vw,130px)/.94 var(--serif);letter-spacing:-.055em;margin:25px 0 28px;max-width:760px}.hero h1 em{font-weight:500;color:#c8b79f}.hero-bottom{display:flex;align-items:end;justify-content:space-between;gap:30px}.hero p{max-width:340px;color:#c6c1b7;font-size:13px;line-height:1.8}.cta{display:inline-flex;align-items:center;gap:24px;border:1px solid rgba(243,240,233,.5);padding:16px 20px;font-size:10px;letter-spacing:.17em;text-transform:uppercase;transition:.3s}.cta:hover{background:var(--paper);color:var(--ink)}.scroll-note{position:absolute;right:5vw;bottom:8vh;writing-mode:vertical-rl;font-size:9px;letter-spacing:.22em;color:#aaa397}
+section{padding:120px 8vw}.section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:54px;gap:25px}.kicker{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#8c8579}.section-head h2{font:500 clamp(38px,5.5vw,72px)/1 var(--serif);letter-spacing:-.04em;margin:14px 0 0}.section-head p{max-width:290px;font-size:12px;line-height:1.8;color:#77736c}.intro{display:grid;grid-template-columns:1fr 1fr;gap:9vw;align-items:center;background:#e8e4dc}.intro-mark{font:italic 500 clamp(65px,11vw,150px)/.85 var(--serif);color:#b3a38e;letter-spacing:-.08em}.intro-copy h2{font:500 clamp(34px,4vw,55px)/1.1 var(--serif);letter-spacing:-.035em;margin:0 0 25px}.intro-copy p{font-size:13px;line-height:2;color:#69665f;max-width:510px}.work-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:76px 7vw}.work-card:nth-child(even){margin-top:110px}.work-image{aspect-ratio:4/5;position:relative;overflow:hidden;background:#d7d0c3;cursor:pointer}.work-card:nth-child(2) .work-image{aspect-ratio:4/5}.art-placeholder{position:absolute;inset:5%;display:grid;place-items:center;background:linear-gradient(145deg,#b8a58c,#4a514b 44%,#242b29 70%,#c1a984);box-shadow:0 16px 35px #17171525;transition:transform .8s}.work-card:nth-child(2) .art-placeholder{background:radial-gradient(ellipse at 65% 34%,#e2c7a2 0 9%,transparent 35%),linear-gradient(125deg,#d4c6b2,#8d6c56 42%,#2c3532 43% 70%,#c2ad91)}.work-card:nth-child(3) .art-placeholder{background:linear-gradient(35deg,#1f2827 0 27%,#b9a17e 28% 46%,#d9d0c2 47% 62%,#65716a 63%)}.work-card:nth-child(4) .art-placeholder{background:radial-gradient(ellipse at 35% 60%,#d8c1a0 0 13%,transparent 38%),linear-gradient(145deg,#6b6b5c,#262b28 52%,#ad9071)}.work-image:hover .art-placeholder{transform:scale(1.045)}.art-placeholder span{font:italic 16px var(--serif);color:#f3f0e9;letter-spacing:.08em;text-shadow:0 2px 12px #0008}.work-image img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}.work-meta{display:flex;justify-content:space-between;align-items:start;padding-top:18px}.work-meta h3{font:500 24px var(--serif);margin:0 0 6px}.work-meta p{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:#888278;margin:0}.work-no{font-size:10px;color:#8c8579;letter-spacing:.12em}.upload-hint{margin-top:34px;padding:20px 22px;border:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:20px;font-size:11px;color:#77736c}.upload-hint button{border:0;background:var(--ink);color:var(--paper);padding:13px 17px;font-size:9px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer}.statement{background:#1c1c19;color:var(--paper);text-align:center;padding:150px 8vw}.statement .kicker{color:#b9aa94}.statement blockquote{font:500 clamp(36px,6vw,78px)/1.14 var(--serif);letter-spacing:-.04em;max-width:1050px;margin:35px auto}.statement blockquote em{color:#bca98e}.about{display:grid;grid-template-columns:.8fr 1.2fr;gap:10vw;align-items:center}.portrait{min-height:530px;background:linear-gradient(155deg,#c9bba6,#777568 50%,#242724);position:relative;overflow:hidden}.portrait:after{content:"ATELIER / ÉTUDE";position:absolute;bottom:22px;left:22px;color:#f3f0e9;font-size:9px;letter-spacing:.2em}.about-copy h2{font:500 clamp(42px,5vw,68px)/1 var(--serif);margin:16px 0 26px;letter-spacing:-.04em}.about-copy p{font-size:13px;line-height:2;color:#716d65;max-width:530px}.contact{background:#e8e4dc;display:flex;justify-content:space-between;align-items:end;gap:40px}.contact h2{font:500 clamp(48px,8vw,105px)/.95 var(--serif);letter-spacing:-.06em;margin:18px 0 0}.contact-right{max-width:300px}.contact-right p{font-size:12px;line-height:1.9;color:#706b63}.contact-link{display:inline-block;margin-top:20px;border-bottom:1px solid var(--ink);padding-bottom:8px;font-size:10px;letter-spacing:.17em;text-transform:uppercase}
+footer{padding:28px 5vw;background:#171715;color:#a9a398;display:flex;justify-content:space-between;font-size:9px;letter-spacing:.14em;text-transform:uppercase}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease}.reveal.visible{opacity:1;transform:none}
+.lightbox{position:fixed;inset:0;background:#10100ff2;z-index:20;display:none;align-items:center;justify-content:center;padding:6vw}.lightbox.open{display:flex}.lightbox img{max-width:90vw;max-height:84vh;object-fit:contain}.close{position:absolute;right:30px;top:25px;color:white;background:none;border:0;font-size:30px;cursor:pointer}
+@media(max-width:760px){.topbar{height:65px;padding:0 6vw}.nav{display:none;position:absolute;top:64px;left:0;right:0;padding:25px 6vw;background:#171715;flex-direction:column;gap:20px}.nav.open{display:flex}.menu{display:block}.hero{min-height:88vh;padding:130px 7vw 9vh}.hero:after{width:64vw;height:37vh;right:10vw;top:18vh}.hero-art{width:48vw;height:31vh;right:18vw;top:21vh}.hero h1{font-size:clamp(55px,15vw,90px);margin-top:210px}.hero-bottom{display:block}.hero p{max-width:300px}.scroll-note{display:none}section{padding:82px 7vw}.section-head{display:block;margin-bottom:38px}.section-head p{margin-top:20px}.intro,.about{grid-template-columns:1fr;gap:40px}.intro-mark{font-size:90px}.work-grid{grid-template-columns:1fr;gap:45px}.work-card:nth-child(even){margin-top:0}.work-image{aspect-ratio:4/4.7}.statement{padding:100px 7vw}.portrait{min-height:390px}.contact{display:block}.contact-right{margin-top:45px}footer{gap:20px;flex-wrap:wrap}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal{opacity:1;transform:none;transition:none}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#">ATELIER<span> / ARTISTE</span></a>
+  <nav class="nav" id="nav"><a href="#oeuvres">Œuvres</a><a href="#demarche">Démarche</a><a href="#apropos">À propos</a><a href="#contact">Contact</a></nav>
+  <button class="menu" id="menu" aria-label="Ouvrir le menu">☰</button>
+</header>
+<main>
+  <section class="hero">
+    <div class="hero-art" aria-hidden="true"></div>
+    <div class="hero-copy">
+      <div class="eyebrow">Peinture contemporaine · Œuvres originales</div>
+      <h1>La matière<br>devient <em>émotion.</em></h1>
+      <div class="hero-bottom">
+        <p>Des œuvres singulières où la texture, la lumière et le contraste racontent ce que les mots ne savent pas toujours dire.</p>
+        <a class="cta" href="#oeuvres">Explorer les œuvres <span>↘</span></a>
+      </div>
+    </div>
+    <div class="scroll-note">DÉFILER POUR EXPLORER ↓</div>
+  </section>
+
+  <section class="intro" id="demarche">
+    <div class="intro-mark reveal">Créer.<br>Ressentir.</div>
+    <div class="intro-copy reveal">
+      <div class="kicker">01 — La démarche</div>
+      <h2>Une recherche entre équilibre et intensité.</h2>
+      <p>Chaque toile est une exploration. Les couches se répondent, les matières se rencontrent et les contrastes donnent naissance à un langage visuel personnel. Une peinture pensée pour être contemplée, ressentie et habitée.</p>
+    </div>
+  </section>
+
+  <section id="oeuvres">
+    <div class="section-head reveal">
+      <div><div class="kicker">02 — Sélection</div><h2>Œuvres choisies<span style="color:#a9987e">.</span></h2></div>
+      <p>Une sélection de pièces originales. Chaque œuvre possède sa propre présence, son rythme et son histoire.</p>
+    </div>
+    <div class="work-grid">
+      <article class="work-card reveal"><div class="work-image" data-title="Les silences" tabindex="0" role="button" aria-label="Voir Les silences"><div class="art-placeholder"><span>ŒUVRE 01</span></div><img alt="Photographie de l'œuvre Les silences"></div><div class="work-meta"><div><h3>Les silences</h3><p>Acrylique sur toile · Série 01</p></div><span class="work-no">01 / 04</span></div></article>
+      <article class="work-card reveal"><div class="work-image" data-title="L'équilibre" tabindex="0" role="button" aria-label="Voir L'équilibre"><div class="art-placeholder"><span>ŒUVRE 02</span></div><img alt="Photographie de l'œuvre L'équilibre"></div><div class="work-meta"><div><h3>L'équilibre</h3><p>Acrylique sur toile · Série 01</p></div><span class="work-no">02 / 04</span></div></article>
+      <article class="work-card reveal"><div class="work-image" data-title="Fragments" tabindex="0" role="button" aria-label="Voir Fragments"><div class="art-placeholder"><span>ŒUVRE 03</span></div><img alt="Photographie de l'œuvre Fragments"></div><div class="work-meta"><div><h3>Fragments</h3><p>Acrylique sur toile · Série 02</p></div><span class="work-no">03 / 04</span></div></article>
+      <article class="work-card reveal"><div class="work-image" data-title="L'ailleurs" tabindex="0" role="button" aria-label="Voir L'ailleurs"><div class="art-placeholder"><span>ŒUVRE 04</span></div><img alt="Photographie de l'œuvre L'ailleurs"></div><div class="work-meta"><div><h3>L'ailleurs</h3><p>Acrylique sur toile · Série 02</p></div><span class="work-no">04 / 04</span></div></article>
+    </div>
+    <div class="upload-hint"><span>Personnalisez la galerie avec vos propres photographies d'œuvres.</span><label><input id="imageUpload" type="file" accept="image/*" multiple hidden><button type="button" onclick="document.getElementById('imageUpload').click()">Ajouter mes photos +</button></label></div>
+  </section>
+
+  <section class="statement">
+    <div class="kicker">L'intention</div>
+    <blockquote class="reveal">« L'art ne cherche pas toujours à expliquer. Il cherche parfois simplement à <em>faire ressentir.</em> »</blockquote>
+  </section>
+
+  <section class="about" id="apropos">
+    <div class="portrait reveal"></div>
+    <div class="about-copy reveal">
+      <div class="kicker">03 — L'artiste</div>
+      <h2>Un regard.<br>Une matière.<br><em style="font-weight:500">Une signature.</em></h2>
+      <p>Je développe un univers pictural guidé par l'expérimentation, la sensibilité et le goût du détail. À travers la peinture acrylique, je compose des espaces où les formes, les textures et les lumières invitent chacun à sa propre interprétation.</p>
+      <p style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#9b907f">Artiste peintre · Œuvres originales</p>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div><div class="kicker">04 — Entrer en contact</div><h2>Une œuvre<br>vous appelle ?</h2></div>
+    <div class="contact-right"><p>Pour une acquisition, une collaboration ou simplement échanger autour de mon travail, je serai heureux de vous lire.</p><a class="contact-link" href="mailto:bonjour@atelier-artiste.fr">Écrire un message ↗</a></div>
+  </section>
+</main>
+<footer><span>© 2026 — ATELIER / ARTISTE</span><span>Portfolio d'art contemporain</span><a href="#">Retour en haut ↑</a></footer>
+<div class="lightbox" id="lightbox" aria-modal="true" role="dialog"><button class="close" id="close" aria-label="Fermer">×</button><img id="lightboxImg" alt=""></div>
+<script>
+const menu=document.getElementById('menu'),nav=document.getElementById('nav');
+menu.addEventListener('click',()=>nav.classList.toggle('open'));
+nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('open')));
+const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+const lightbox=document.getElementById('lightbox'),lbImg=document.getElementById('lightboxImg');
+function openWork(card){const img=card.querySelector('img');if(img.src&&img.style.display==='block'){lbImg.src=img.src;lightbox.classList.add('open')}}
+document.querySelectorAll('.work-image').forEach(card=>{card.addEventListener('click',()=>openWork(card));card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')openWork(card)})});
+document.getElementById('close').addEventListener('click',()=>lightbox.classList.remove('open'));
+lightbox.addEventListener('click',e=>{if(e.target===lightbox)lightbox.classList.remove('open')});
+document.getElementById('imageUpload').addEventListener('change',e=>{
+ const files=[...e.target.files].slice(0,4);
+ files.forEach((file,i)=>{const card=document.querySelectorAll('.work-card')[i];if(!card)return;const img=card.querySelector('img');img.src=URL.createObjectURL(file);img.style.display='block';card.querySelector('.art-placeholder').style.display='none';card.querySelector('h3').textContent=file.name.replace(/\.[^.]+$/,'').replace(/[-_]/g,' ')});
+});
+</script>
+</body>
+</html>

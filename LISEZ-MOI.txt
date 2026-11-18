@@ -1,0 +1,13 @@
+PORTFOLIO ATELIER — démarrage rapide
+
+1. Décompressez le dossier.
+2. Ouvrez index.html dans votre navigateur pour prévisualiser le site.
+3. Pour intégrer vos œuvres, utilisez le bouton « Ajouter mes photos » dans la galerie.
+   Cette fonction sert à prévisualiser localement jusqu'à quatre images ; les photos ne sont
+   pas enregistrées sur un serveur et devront être intégrées au site avant sa publication.
+4. Remplacez les textes provisoires, les titres des œuvres et l'adresse e-mail par vos informations.
+
+Le site est responsive (mobile / ordinateur), avec navigation mobile, animations au défilement
+et affichage agrandi des photos. Les polices Google nécessitent une connexion internet.
+Pour publier le site, déposez index.html sur votre hébergeur (ou demandez-moi de préparer
+la version avec vos vraies œuvres, votre identité visuelle et votre nom de domaine).
