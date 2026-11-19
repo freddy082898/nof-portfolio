@@ -10,7 +10,7 @@ export async function showArtwork3D({title,width_cm,height_cm,front,views=[]}){
  const close=document.createElement('button');close.textContent='Fermer ×';close.style.cssText='background:transparent;border:1px solid #999;border-radius:30px;padding:10px 16px;color:inherit;font:inherit;cursor:pointer';
  header.append(name,close);
  const stage=document.createElement('div');stage.style.cssText='position:relative;flex:1;min-height:0;touch-action:none;cursor:grab;overflow:hidden';
- const footer=document.createElement('footer');footer.style.cssText='padding:14px 20px 24px;text-align:center;font-size:13px;color:#555';
+ const footer=document.createElement('footer');footer.style.cssText='display:block;flex:none;background:#e9e6e0;padding:14px 20px 24px;text-align:center;font-size:13px;color:#555';
  footer.textContent='Tourner avec un doigt · Zoomer avec deux doigts';
  modal.append(header,stage,footer);document.body.append(modal);
  let renderer,scene,camera,mesh,geo,edgeGeo,edgeMat,frameGeo,frameMat,raf=0,disposed=false,observer,resize=()=>{},textures=[];
@@ -22,7 +22,7 @@ export async function showArtwork3D({title,width_cm,height_cm,front,views=[]}){
   camera=new THREE.OrthographicCamera(-2,2,2,-2,.1,100);
   renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
   renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.outputColorSpace=THREE.SRGBColorSpace;
-  renderer.toneMapping=THREE.NoToneMapping;stage.append(renderer.domElement);
+  renderer.toneMapping=THREE.NoToneMapping;renderer.domElement.style.cssText='display:block;width:100%;height:100%;max-width:none;max-height:none';stage.append(renderer.domElement);
   scene.add(new THREE.AmbientLight(0xffffff,2));
   const soft=new THREE.DirectionalLight(0xffffff,1.25);soft.position.set(-3,5,7);scene.add(soft);
   const rim=new THREE.DirectionalLight(0xffffff,.6);rim.position.set(3,2,-5);scene.add(rim);
@@ -58,9 +58,9 @@ export async function showArtwork3D({title,width_cm,height_cm,front,views=[]}){
   const release=e=>{pointers.delete(e.pointerId);if(pointers.size<2)pinchDistance=0;if(!pointers.size)stage.style.cursor='grab'};
   stage.addEventListener('pointerup',release);stage.addEventListener('pointercancel',release);
   stage.addEventListener('wheel',e=>{e.preventDefault();zoomFactor=Math.max(.55,Math.min(2.5,zoomFactor*(1-e.deltaY*.001)));resize()},{passive:false});
-  resize=()=>{if(disposed)return;const rect=stage.getBoundingClientRect();if(!rect.width||!rect.height)return;renderer.setSize(rect.width,rect.height,false);
+  resize=()=>{if(disposed)return;const rect=stage.getBoundingClientRect();if(!rect.width||!rect.height)return;renderer.setSize(rect.width,rect.height,true);
    // Fit the entire rotated canvas in both axes, including its corners.
-   const aspect=rect.width/rect.height,diagonal=Math.hypot(w,h,depth),padding=1.28;
+   const aspect=rect.width/rect.height,diagonal=Math.hypot(w,h,depth),padding=1.55;
    const visibleHeight=Math.max(h*padding,diagonal*padding,diagonal*padding/aspect)/zoomFactor;
    const halfHeight=visibleHeight/2;
    camera.left=-halfHeight*aspect;camera.right=halfHeight*aspect;camera.top=halfHeight;camera.bottom=-halfHeight;camera.updateProjectionMatrix();
