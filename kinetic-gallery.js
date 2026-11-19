@@ -5,17 +5,21 @@ const count=document.getElementById('kinetic-count');
 const prev=document.getElementById('kinetic-prev');
 const next=document.getElementById('kinetic-next');
 const gallery=document.getElementById('nof-gallery');
+const focusTitle=document.getElementById('kinetic-title');
+const focusSubtitle=document.getElementById('kinetic-subtitle');
+const openButton=document.getElementById('kinetic-open');
+const progress=document.getElementById('kinetic-progress-fill');
 if(viewport&&ring&&gallery){
-  let works=[],active=0,current=0,target=0,dragStart=null,lastX=0,moved=false,raf=0,paused=false,lastSwipeAt=0,mode='circle',mix=1,modeRaf=0;
+  let works=[],active=0,current=0,target=0,dragStart=null,lastX=0,moved=false,raf=0,lastSwipeAt=0;
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const fallback=[{title:'NOF / La matière',src:''},{title:'NOF / Le geste',src:''},{title:'NOF / La lumière',src:''},{title:'NOF / Le regard',src:''},{title:'NOF / La trace',src:''}];
+  const fallback=[{title:'Collection en préparation',src:''}];
   function collect(){
     const found=[...gallery.querySelectorAll('.work-card')].map((el,i)=>({title:el.querySelector('h3')?.textContent||'Œuvre '+(i+1),src:el.querySelector('img')?.src||'',el})).filter(x=>x.src);
     const fresh=found.length?found:fallback;
-    if(JSON.stringify(fresh.map(x=>x.src))===JSON.stringify(works.map(x=>x.src)))return;
+    if(JSON.stringify(fresh.map(x=>x.src+'|'+x.title))===JSON.stringify(works.map(x=>x.src+'|'+x.title)))return;
     works=fresh;active=0;target=0;current=0;render();
   }
-  function radius(){const width=viewport.getBoundingClientRect().width||innerWidth;return Math.max(width<760?165:280,Math.min(width*.37,500))}
+  function radius(){const width=viewport.getBoundingClientRect().width||innerWidth;return Math.max(width<760?145:290,Math.min(width*.36,470))}
   function render(){
     ring.replaceChildren();
     works.forEach((work,i)=>{
@@ -23,41 +27,34 @@ if(viewport&&ring&&gallery){
       if(work.src){const img=document.createElement('img');img.src=work.src;img.alt=work.title;img.loading=i<3?'eager':'lazy';card.append(img)}
       else{const placeholder=document.createElement('span');placeholder.className='kinetic-placeholder';placeholder.textContent='NOF';card.append(placeholder)}
       const label=document.createElement('span');label.className='kinetic-card-title';label.textContent=work.title;card.append(label);
-      card.addEventListener('click',()=>{if(moved)return;if(work.el?.querySelector('.work-image')){work.el.querySelector('.work-image').click()}else go(i)});
+      card.addEventListener('click',()=>{if(moved)return;if(i!==active){go(i);return}openActive()});
       ring.append(card);
     });
     update();
   }
+  function openActive(){const work=works[active];const image=work?.el?.querySelector('.work-image');if(image)image.click()}
+  openButton?.addEventListener('click',openActive);
   function update(){
-    const n=works.length||1,r=radius(),width=viewport.clientWidth||innerWidth,mobile=width<760;
+    const n=works.length||1,r=radius(),mobile=viewport.clientWidth<760;
     [...ring.children].forEach((card,i)=>{
-      let d=i-current;if(n>1){d=((d+n*50+n/2)%n)-n/2}
-      const angle=n===1?0:d*Math.PI*2/n;
-      const circle={x:Math.sin(angle)*r,y:0,z:Math.cos(angle)*r-r,ry:-Math.sin(angle)*24,rz:0};
-      const fan={x:d*(mobile?94:170),y:Math.abs(d)*(mobile?15:24),z:-Math.abs(d)*65,ry:d*-12,rz:d*-(mobile?9:12)};
-      const tunnel={x:Math.sin(angle)*r*.62,y:Math.cos(angle)*r*.38,z:-Math.abs(d)*(mobile?135:210),ry:-Math.sin(angle)*25,rz:0};
-      const galleryLayout={x:d*(mobile?160:290),y:0,z:-Math.abs(d)*95,ry:d*-8,rz:0};
-      const targetLayout={circle,fan,tunnel,gallery:galleryLayout}[mode]||circle;
-      const blend=(k)=>circle[k]*(1-mix)+targetLayout[k]*mix;
-      const x=blend('x'),y=blend('y'),z=blend('z'),ry=blend('ry'),rz=blend('rz');
-      card.style.transform='translate3d('+x.toFixed(1)+'px,'+y.toFixed(1)+'px,'+z.toFixed(1)+'px) rotateY('+ry.toFixed(1)+'deg) rotateZ('+rz.toFixed(1)+'deg)';
-      card.style.opacity=String(Math.max(.38,1-Math.abs(d)*.16));
+      let d=i-current;if(n>1)d=((d+n*50+n/2)%n)-n/2;
+      const x=d*r*.88;
+      const y=Math.abs(d)*(mobile?7:12);
+      const z=-Math.abs(d)*(mobile?180:245);
+      const ry=-Math.sign(d)*Math.min(Math.abs(d)*17,32);
+      const scale=Math.max(.63,1-Math.abs(d)*.13);
+      card.style.transform='translate3d('+x.toFixed(1)+'px,'+y.toFixed(1)+'px,'+z.toFixed(1)+'px) rotateY('+ry.toFixed(1)+'deg) scale('+scale.toFixed(3)+')';
+      card.style.opacity=String(Math.max(.27,1-Math.abs(d)*.28));
       card.classList.toggle('is-front',i===active);
       card.style.zIndex=String(Math.round(10000+z));
+      card.tabIndex=i===active?0:-1;
     });
     count.textContent=String(active+1).padStart(2,'0')+' / '+String(n).padStart(2,'0');
+    if(focusTitle)focusTitle.textContent=works[active]?.title||'La collection NOF';
+    if(focusSubtitle)focusSubtitle.textContent=works[active]?.el?.querySelector('.work-meta p')?.textContent?.trim()||'Œuvre originale · Collection NOF';
+    if(progress)progress.style.width=((active+1)/n*100).toFixed(2)+'%';
+    if(openButton)openButton.disabled=!works[active]?.el;
   }
-  function setMode(next){
-    if(!['circle','fan','tunnel','gallery'].includes(next)||mode===next)return;
-    mode=next;
-    document.querySelectorAll('[data-kinetic-mode]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.kineticMode===mode)));
-    cancelAnimationFrame(modeRaf);
-    if(reduced){mix=1;update();return}
-    const start=performance.now(),duration=850;
-    const animateMode=now=>{const t=Math.min(1,(now-start)/duration);mix=t*t*(3-2*t);update();if(t<1)modeRaf=requestAnimationFrame(animateMode)};
-    mix=0;modeRaf=requestAnimationFrame(animateMode);
-  }
-  document.querySelectorAll('[data-kinetic-mode]').forEach(button=>button.addEventListener('click',()=>setMode(button.dataset.kineticMode)));
   function tick(){const delta=target-current;current=reduced?target:current+delta*.105;update();if(Math.abs(target-current)>.001){raf=requestAnimationFrame(tick)}else{current=target;update();raf=0}}
   function animate(){if(!raf)raf=requestAnimationFrame(tick)}
   function go(i){const n=works.length||1;if(n===1){active=0;return}const normalized=((i%n)+n)%n;let diff=normalized-active;if(diff>n/2)diff-=n;if(diff< -n/2)diff+=n;active=normalized;target+=diff;animate()}
@@ -75,6 +72,5 @@ if(viewport&&ring&&gallery){
   const observer=new MutationObserver(()=>{if(gallery.querySelector('.work-card'))collect()});
   observer.observe(gallery,{childList:true,subtree:true});
   works=fallback;render();collect();
-  // No unsolicited rotation: let visitors inspect artwork without losing their place.
-  const visibility=new IntersectionObserver(entries=>{paused=!entries[0]?.isIntersecting},{threshold:.05});visibility.observe(viewport);
+  // Intentionally no auto-rotation: original artwork remains the focus.
 }
