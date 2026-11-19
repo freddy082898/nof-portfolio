@@ -6,7 +6,7 @@ const prev=document.getElementById('kinetic-prev');
 const next=document.getElementById('kinetic-next');
 const gallery=document.getElementById('nof-gallery');
 if(viewport&&ring&&gallery){
-  let works=[],active=0,current=0,target=0,dragStart=null,lastX=0,moved=false,raf=0,paused=false;
+  let works=[],active=0,current=0,target=0,dragStart=null,lastX=0,moved=false,raf=0,paused=false,lastSwipeAt=0;
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const fallback=[{title:'NOF / La matière',src:''},{title:'NOF / Le geste',src:''},{title:'NOF / La lumière',src:''},{title:'NOF / Le regard',src:''},{title:'NOF / La trace',src:''}];
   function collect(){
@@ -49,12 +49,12 @@ if(viewport&&ring&&gallery){
   viewport.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();go(active+(e.key==='ArrowRight'?1:-1))}});
   viewport.addEventListener('pointerdown',e=>{if(e.button!==0)return;dragStart=e.clientX;lastX=e.clientX;moved=false;try{viewport.setPointerCapture(e.pointerId)}catch{}});
   viewport.addEventListener('pointermove',e=>{if(dragStart===null)return;const delta=e.clientX-dragStart;if(Math.abs(delta)>12)moved=true;lastX=e.clientX});
-  function end(){if(dragStart===null)return;const delta=lastX-dragStart;dragStart=null;if(Math.abs(delta)>25)go(active+(delta<0?1:-1));if(moved)setTimeout(()=>{moved=false},200)}
+  function end(){if(dragStart===null)return;const delta=lastX-dragStart;dragStart=null;if(Math.abs(delta)>25){lastSwipeAt=Date.now();go(active+(delta<0?1:-1))}if(moved)setTimeout(()=>{moved=false},200)}
   viewport.addEventListener('pointerup',end);viewport.addEventListener('pointercancel',end);
   // Touch fallback for older iOS Safari versions without reliable pointer capture.
   let touchX=null;
   viewport.addEventListener('touchstart',e=>{touchX=e.changedTouches[0]?.clientX??null},{passive:true});
-  viewport.addEventListener('touchend',e=>{if(touchX===null)return;const delta=(e.changedTouches[0]?.clientX??touchX)-touchX;touchX=null;if(Math.abs(delta)>35&&dragStart===null){moved=true;go(active+(delta<0?1:-1));setTimeout(()=>{moved=false},200)}},{passive:true});
+  viewport.addEventListener('touchend',e=>{if(touchX===null)return;const delta=(e.changedTouches[0]?.clientX??touchX)-touchX;touchX=null;if(Math.abs(delta)>35&&dragStart===null&&Date.now()-lastSwipeAt>350){lastSwipeAt=Date.now();moved=true;go(active+(delta<0?1:-1));setTimeout(()=>{moved=false},200)}},{passive:true});
   addEventListener('resize',()=>update(),{passive:true});
   const observer=new MutationObserver(()=>{if(gallery.querySelector('.work-card'))collect()});
   observer.observe(gallery,{childList:true,subtree:true});
