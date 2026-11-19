@@ -71,6 +71,8 @@ a:focus-visible,button:focus-visible{outline:2px solid #bda47b;outline-offset:4p
 }
 @media(prefers-reduced-motion:reduce){.work-image,.work-meta button{transition:none}.work-image:hover,.work-meta button:hover{transform:none}}
 
+
+.exhibition-invite{display:flex;align-items:flex-end;justify-content:space-between;gap:30px;padding:clamp(28px,5vw,65px);margin:0 0 70px;background:#292722;color:#f5f0e6;position:relative;overflow:hidden}.exhibition-invite:after{content:"";position:absolute;right:-10%;top:-70%;width:50%;height:210%;border:1px solid #e5d9c333;transform:rotate(25deg);pointer-events:none}.exhibition-invite .kicker{color:#c6b497}.exhibition-invite h3{font:500 clamp(40px,5vw,74px)/1.04 var(--serif);letter-spacing:-.04em;margin:18px 0}.exhibition-invite h3 em{color:#d6c1a2}.exhibition-invite p{font-size:13px;line-height:1.8;max-width:410px;color:#d3cec4}.exhibition-invite button{position:relative;z-index:1;background:#f4efe6;color:#26231f;border:0;padding:17px 20px;cursor:pointer;min-height:52px;font-size:11px;letter-spacing:.07em;white-space:nowrap}.exhibition-invite button:disabled{opacity:.45;cursor:wait}@media(max-width:760px){.exhibition-invite{display:block;padding:30px 24px;margin-bottom:50px}.exhibition-invite button{margin-top:18px;white-space:normal;width:100%}}
 </style>
 </head>
 <body>
@@ -107,7 +109,11 @@ a:focus-visible,button:focus-visible{outline:2px solid #bda47b;outline-offset:4p
       <div><div class="kicker">02 — Sélection</div><h2>Œuvres choisies<span style="color:#a9987e">.</span></h2></div>
       <p>Une sélection de pièces originales. Chaque œuvre possède sa propre présence, son rythme et son histoire.</p>
     </div>
-    <div class="work-grid" id="nof-gallery"><p>Chargement de la collection…</p></div>
+    <div class="exhibition-invite reveal">
+ <div><div class="kicker">NOF / EXPÉRIENCE IMMERSIVE</div><h3>Entrez dans<br><em>la galerie.</em></h3><p>Parcourez une exposition virtuelle de peintures originales, choisissez un tableau et explorez ses détails.</p></div>
+ <button id="virtual-exhibition-action" type="button" disabled>Visiter l’exposition 3D <span aria-hidden="true">↗</span></button>
+ </div>
+ <div class="work-grid" id="nof-gallery"><p>Chargement de la collection…</p></div>
   </section>
 
   <section class="statement">
