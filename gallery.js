@@ -19,6 +19,13 @@ if(!urls.some(Boolean)&&img.src)urls[0]=img.src;
 async function openViewer(){if(!urls.some(Boolean))return;try{const {showArtwork3D}=await import('./viewer3d.js');await showArtwork3D({title:art.title,width_cm:art.width_cm,height_cm:art.height_cm,front:img.src||urls[0],views:urls})}catch(e){console.error(e);alert('Impossible de lancer la visualisation 3D sur cet appareil.')}}
 frame.addEventListener('click',openViewer);
 frame.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openViewer()}});
-const meta=document.createElement('div');meta.className='work-meta';const inner=document.createElement('div');const title=document.createElement('h3');title.textContent=art.title;const details=document.createElement('p');details.textContent=[art.technique,art.width_cm&&art.height_cm?art.width_cm+' × '+art.height_cm+' cm':null,art.year_created,art.status==='sold'?'Vendu':art.status==='reserved'?'Réservé':null].filter(Boolean).join(' · ');inner.append(title,details);meta.append(inner);article.append(frame,meta);gallery.append(article)
+const meta=document.createElement('div');meta.className='work-meta';const inner=document.createElement('div');const title=document.createElement('h3');title.textContent=art.title;const details=document.createElement('p');details.textContent=[art.technique,art.width_cm&&art.height_cm?art.width_cm+' × '+art.height_cm+' cm':null,art.year_created,art.status==='sold'?'Vendu':art.status==='reserved'?'Réservé':null].filter(Boolean).join(' · ');inner.append(title,details);meta.append(inner);
+if(Number(art.width_cm)>0&&Number(art.height_cm)>0&&img.src){
+ const roomButton=document.createElement('button');roomButton.type='button';roomButton.textContent='Voir chez moi';roomButton.setAttribute('aria-label','Visualiser '+art.title+' dans ma pièce');
+ roomButton.style.cssText='background:transparent;border:1px solid #777;padding:11px 13px;cursor:pointer;font-size:11px;letter-spacing:.08em;white-space:nowrap;color:inherit';
+ roomButton.onclick=async()=>{roomButton.disabled=true;try{const {showArtworkInRoom}=await import('./room-viewer.js');await showArtworkInRoom({title:art.title,width_cm:art.width_cm,height_cm:art.height_cm,imageUrl:img.src})}catch(e){console.error(e);alert('Visualisation dans une pièce indisponible.')}finally{roomButton.disabled=false}};
+ meta.append(roomButton);
+}
+article.append(frame,meta);gallery.append(article)
 }
 }catch(e){console.error(e);gallery.textContent='La collection est momentanément indisponible.'}
