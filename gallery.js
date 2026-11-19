@@ -5,16 +5,22 @@ try{
 const {data,error}=await sb.from('artworks').select('id,title,description,technique,width_cm,height_cm,year_created,status,price_eur,image_path,created_at').eq('published',true).order('created_at',{ascending:false});
 if(error)throw error;
 gallery.replaceChildren();
+const {data:heroSettings,error:heroSettingsError}=await sb.from('nof_site_settings').select('hero_artwork_id').eq('id',1).maybeSingle();
+if(heroSettingsError)console.warn('NOF Hero settings:',heroSettingsError.message);
+const selectedHeroId=heroSettings?.hero_artwork_id||null;
+let heroAssigned=false;
 const exhibitionWorks=[];
 const exhibitionHost=document.getElementById('virtual-exhibition-action');
 if(!data?.length){const p=document.createElement('p');p.textContent='La collection sera dévoilée prochainement.';gallery.append(p)}
-for(const art of data||[]){
+// Explicit Hero selection takes priority; if unpublished or missing, use the newest published image.
+if(selectedHeroId&&!data?.some(art=>art.id===selectedHeroId&&art.image_path))console.warn('NOF Hero selection unavailable; using fallback.');
+for(const art of [...(data||[])].sort((a,b)=>Number(b.id===selectedHeroId)-Number(a.id===selectedHeroId))){
 const article=document.createElement('article');article.className='work-card reveal visible';
 const frame=document.createElement('div');frame.className='work-image';frame.tabIndex=0;frame.setAttribute('role','button');frame.setAttribute('aria-label','Voir '+art.title);
 const img=document.createElement('img');img.alt='Peinture originale : '+art.title;img.style.display='block';img.style.objectFit='contain';img.style.background='#fff';
 if(art.image_path){const {data:signed}=await sb.storage.from('artworks-images').createSignedUrl(art.image_path,3600);if(signed?.signedUrl)img.src=signed.signedUrl}
 if(img.src)exhibitionWorks.push({title:art.title,technique:art.technique,width_cm:art.width_cm,height_cm:art.height_cm,imageUrl:img.src});
-if(img.src&&!document.querySelector('.hero-art.has-artwork')){const heroArtwork=document.querySelector('.hero-art');if(heroArtwork){heroArtwork.style.backgroundImage='url("'+img.src.replaceAll('"','%22')+'")';heroArtwork.classList.add('has-artwork');heroArtwork.setAttribute('aria-label','Œuvre à la une : '+art.title)}}
+if(img.src&&!heroAssigned&&(!selectedHeroId||art.id===selectedHeroId)){const heroArtwork=document.querySelector('.hero-art');if(heroArtwork){heroArtwork.style.backgroundImage='url("'+img.src.replaceAll('"','%22')+'")';heroArtwork.classList.add('has-artwork');heroAssigned=true;heroArtwork.setAttribute('aria-label','Œuvre à la une : '+art.title)}}
 if(!img.src){const placeholder=document.createElement('div');placeholder.className='art-placeholder';placeholder.textContent='NOF';frame.append(placeholder)}else frame.append(img);
 const {data:views,error:viewsError}=await sb.from('artwork_views').select('angle_index,image_path').eq('artwork_id',art.id).order('angle_index');
 if(viewsError)console.warn('Vues indisponibles',viewsError);
