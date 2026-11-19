@@ -11,6 +11,7 @@ const article=document.createElement('article');article.className='work-card rev
 const frame=document.createElement('div');frame.className='work-image';frame.tabIndex=0;frame.setAttribute('role','button');frame.setAttribute('aria-label','Voir '+art.title);
 const img=document.createElement('img');img.alt='Peinture originale : '+art.title;img.style.display='block';img.style.objectFit='contain';img.style.background='#fff';
 if(art.image_path){const {data:signed}=await sb.storage.from('artworks-images').createSignedUrl(art.image_path,3600);if(signed?.signedUrl)img.src=signed.signedUrl}
+if(img.src&&!document.querySelector('.hero-art.has-artwork')){const heroArtwork=document.querySelector('.hero-art');if(heroArtwork){heroArtwork.style.backgroundImage='url("'+img.src.replaceAll('"','%22')+'")';heroArtwork.classList.add('has-artwork');heroArtwork.setAttribute('aria-label','Œuvre à la une : '+art.title)}}
 if(!img.src){const placeholder=document.createElement('div');placeholder.className='art-placeholder';placeholder.textContent='NOF';frame.append(placeholder)}else frame.append(img);
 const {data:views,error:viewsError}=await sb.from('artwork_views').select('angle_index,image_path').eq('artwork_id',art.id).order('angle_index');
 if(viewsError)console.warn('Vues indisponibles',viewsError);
