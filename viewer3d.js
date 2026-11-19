@@ -19,7 +19,7 @@ export async function showArtwork3D({title,width_cm,height_cm,front,views=[]}){
  const loading=document.createElement('div');loading.setAttribute('role','status');loading.textContent='Chargement de la toile 3D…';loading.style.cssText='position:absolute;inset:0;display:grid;place-items:center;color:#555;font:14px system-ui;pointer-events:none';stage.append(loading);
  let renderer,scene,camera,mesh,geo,edgeGeo,edgeMat,frameGeo,frameMat,raf=0,disposed=false,observer,resize=()=>{},textures=[];
  const key=e=>{if(e.key==='Escape')destroy()};
- function destroy(){if(disposed)return;disposed=true;cancelAnimationFrame(raf);observer?.disconnect();window.removeEventListener('keydown',key);geo?.dispose();edgeGeo?.dispose();edgeMat?.dispose();frameGeo?.dispose();frameMat?.dispose();mesh?.material?.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());renderer?.dispose();modal.remove()}
+ function destroy(){if(disposed)return;disposed=true;cancelAnimationFrame(raf);observer?.disconnect();window.removeEventListener('resize',resize);window.removeEventListener('keydown',key);geo?.dispose();edgeGeo?.dispose();edgeMat?.dispose();frameGeo?.dispose();frameMat?.dispose();mesh?.material?.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());renderer?.dispose();modal.remove()}
  close.onclick=destroy;window.addEventListener('keydown',key);
  try{
   scene=new THREE.Scene();scene.background=new THREE.Color('#e9e6e0');
@@ -51,7 +51,7 @@ export async function showArtwork3D({title,width_cm,height_cm,front,views=[]}){
   // Unlit front face: preserve the source photograph's sRGB colors without scene-light washout.
   const painting=new THREE.MeshBasicMaterial({map:frontTex||null,color:0xffffff,toneMapped:false});
   const backing=new THREE.MeshStandardMaterial({map:backTex||null,color:backTex?0xffffff:0xc3b8a7,roughness:.9});
-  mesh=new THREE.Mesh(geo,[canvasSide,canvasSide,canvasTop,canvasTop,painting,backing]);scene.add(mesh);loading.remove();
+  mesh=new THREE.Mesh(geo,[canvasSide,canvasSide,canvasTop,canvasTop,painting,backing]);scene.add(mesh);
   // Subtle edge detail, without a fake thick black frame.
   edgeGeo=new THREE.EdgesGeometry(geo);edgeMat=new THREE.LineBasicMaterial({color:0xb5aa9b,transparent:true,opacity:.55});
   mesh.add(new THREE.LineSegments(edgeGeo,edgeMat));
@@ -59,7 +59,7 @@ export async function showArtwork3D({title,width_cm,height_cm,front,views=[]}){
   const go=(y,p)=>{targetYaw=y;targetPitch=p;autoTarget=true;velocityX=velocityY=0};
   frontButton.onclick=()=>go(0,0);sideButton.onclick=()=>go(-Math.PI/2,0);backButton.onclick=()=>go(-Math.PI,0);resetButton.onclick=()=>{zoomFactor=1;resize();go(-.26,.08)};
   const pointers=new Map();let pinchDistance=0;
-  stage.addEventListener('pointerdown',e=>{stage.setPointerCapture(e.pointerId);pointers.set(e.pointerId,[e.clientX,e.clientY]);stage.style.cursor='grabbing'});
+  stage.addEventListener('pointerdown',e=>{try{stage.setPointerCapture(e.pointerId)}catch{}pointers.set(e.pointerId,[e.clientX,e.clientY]);stage.style.cursor='grabbing'});
   stage.addEventListener('pointermove',e=>{
    if(!pointers.has(e.pointerId))return;
    const prev=pointers.get(e.pointerId);pointers.set(e.pointerId,[e.clientX,e.clientY]);
@@ -76,7 +76,7 @@ export async function showArtwork3D({title,width_cm,height_cm,front,views=[]}){
    const halfHeight=visibleHeight/2;
    camera.left=-halfHeight*aspect;camera.right=halfHeight*aspect;camera.top=halfHeight;camera.bottom=-halfHeight;camera.updateProjectionMatrix();
   };
-  observer=new ResizeObserver(resize);observer.observe(stage);resize();
-  function animate(){if(disposed)return;raf=requestAnimationFrame(animate);if(!pointers.size){yaw+=velocityX;pitch=Math.max(-1.35,Math.min(1.35,pitch+velocityY));velocityX*=.89;velocityY*=.89}if(autoTarget){yaw+=(targetYaw-yaw)*.16;pitch+=(targetPitch-pitch)*.16;if(Math.abs(targetYaw-yaw)+Math.abs(targetPitch-pitch)<.002)autoTarget=false}mesh.rotation.set(pitch,yaw,0);camera.position.set(0,0,8);camera.lookAt(0,0,0);renderer.render(scene,camera)}animate();
- }catch(e){console.error('NOF viewer',e);loading.textContent='Impossible de charger la vue 3D. Fermez puis réessayez.';footer.textContent='La visualisation 3D n’est pas disponible sur cet appareil.'}
+  if(typeof ResizeObserver!=='undefined'){observer=new ResizeObserver(resize);observer.observe(stage)}else{window.addEventListener('resize',resize)}resize();
+  function animate(){if(disposed)return;raf=requestAnimationFrame(animate);if(!pointers.size){yaw+=velocityX;pitch=Math.max(-1.35,Math.min(1.35,pitch+velocityY));velocityX*=.89;velocityY*=.89}if(autoTarget){yaw+=(targetYaw-yaw)*.16;pitch+=(targetPitch-pitch)*.16;if(Math.abs(targetYaw-yaw)+Math.abs(targetPitch-pitch)<.002)autoTarget=false}mesh.rotation.set(pitch,yaw,0);camera.position.set(0,0,8);camera.lookAt(0,0,0);renderer.render(scene,camera);if(loading.isConnected)loading.remove()}animate();
+ }catch(e){console.error('NOF viewer',e);if(!loading.isConnected)stage.append(loading);const detail=String(e?.message||e||'Erreur inconnue').slice(0,280);loading.textContent='Erreur de visualisation 3D : '+detail;loading.style.padding='24px';loading.style.textAlign='center';footer.textContent='Erreur technique du visualiseur NOF — ce message ne signifie pas que votre appareil est incompatible.'}
 }
