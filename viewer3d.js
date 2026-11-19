@@ -26,9 +26,9 @@ export async function showArtwork3D({title,width_cm,height_cm,front,views=[]}){
   renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
   renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.outputColorSpace=THREE.SRGBColorSpace;
   renderer.toneMapping=THREE.NoToneMapping;renderer.domElement.style.cssText='display:block;width:100%;height:100%;max-width:none;max-height:none';stage.append(renderer.domElement);
-  scene.add(new THREE.AmbientLight(0xffffff,2));
-  const soft=new THREE.DirectionalLight(0xffffff,1.25);soft.position.set(-3,5,7);scene.add(soft);
-  const rim=new THREE.DirectionalLight(0xffffff,.6);rim.position.set(3,2,-5);scene.add(rim);
+  scene.add(new THREE.AmbientLight(0xffffff,.9));
+  const soft=new THREE.DirectionalLight(0xffffff,1.1);soft.position.set(-3,5,7);scene.add(soft);
+  const rim=new THREE.DirectionalLight(0xffffff,.35);rim.position.set(3,2,-5);scene.add(rim);
   const loader=new THREE.TextureLoader();
   async function load(url){if(!url)return null;try{const t=await loader.loadAsync(url);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());textures.push(t);return t}catch(e){console.warn('NOF photo unavailable',e);return null}}
   const frontTex=await load(front||views[0]);if(disposed)return;
@@ -47,7 +47,7 @@ export async function showArtwork3D({title,width_cm,height_cm,front,views=[]}){
   const fabric=new THREE.CanvasTexture(fabricCanvas);fabric.colorSpace=THREE.SRGBColorSpace;fabric.wrapS=fabric.wrapT=THREE.RepeatWrapping;fabric.repeat.set(2,4);textures.push(fabric);
   const canvasSide=new THREE.MeshStandardMaterial({map:fabric,color:0xf7f3ed,roughness:.96,metalness:0});
   const canvasTop=new THREE.MeshStandardMaterial({map:fabric,color:0xffffff,roughness:.96,metalness:0});
-  const painting=new THREE.MeshStandardMaterial({map:frontTex||null,color:0xffffff,roughness:.82,metalness:0,emissive:0xffffff,emissiveIntensity:.18,emissiveMap:frontTex||null});
+  const painting=new THREE.MeshStandardMaterial({map:frontTex||null,color:0xffffff,roughness:.88,metalness:0});
   const backing=new THREE.MeshStandardMaterial({map:backTex||null,color:backTex?0xffffff:0xc3b8a7,roughness:.9});
   mesh=new THREE.Mesh(geo,[canvasSide,canvasSide,canvasTop,canvasTop,painting,backing]);scene.add(mesh);
   // Subtle edge detail, without a fake thick black frame.
