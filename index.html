@@ -179,6 +179,19 @@ footer{background:#241f1b}
 #oeuvres .kinetic-ui{top:22px}
 #oeuvres .kinetic-card{border-color:#e6dfd3}
 @media(max-width:760px){.hero{padding:115px 6vw 80px;align-items:center}.hero h1{font-size:clamp(64px,15.1vw,108px);line-height:.88;margin:30px 0 35px}.hero h1 em{padding-left:4vw}.hero-bottom{gap:18px}.hero-bottom p{font-size:12px;max-width:300px}#oeuvres .kinetic-stage{height:540px;min-height:0;margin:20px 0 65px}#oeuvres .kinetic-ring{top:49%}#oeuvres .kinetic-ui{top:15px}}
+
+/* NOF CINEMATIC MODES / collection only */
+#oeuvres .kinetic-stage{height:clamp(480px,68vw,720px);margin:40px 0 90px;position:relative;inset:auto;overflow:hidden;border:1px solid #bda98c77;border-radius:4px;background:radial-gradient(ellipse at 50% 40%,#6b5d4e,#26221d 67%,#191713);perspective:1300px;isolation:isolate}
+#oeuvres .kinetic-viewport{inset:65px 0 100px;z-index:2;touch-action:pan-y}
+#oeuvres .kinetic-ring{top:50%;transform-style:preserve-3d}
+#oeuvres .kinetic-card{width:clamp(145px,22vw,300px);height:clamp(195px,30vw,405px);margin-left:calc(clamp(145px,22vw,300px)/-2);margin-top:calc(clamp(195px,30vw,405px)/-2);border:6px solid #eee6d8;transform-style:preserve-3d}
+#oeuvres .kinetic-card img{object-fit:contain}
+#oeuvres .kinetic-ui{top:20px;left:4%;right:4%}
+#oeuvres .kinetic-modes{position:absolute;bottom:49px;left:0;right:0;z-index:9;display:flex;justify-content:center;gap:7px;flex-wrap:wrap;padding:0 10px}
+#oeuvres .kinetic-modes button{border:1px solid #e6d7c599;background:#ffffff12;color:#f3e7d7;border-radius:50px;padding:11px 17px;font:600 11px system-ui;cursor:pointer;backdrop-filter:blur(9px)}
+#oeuvres .kinetic-modes button[aria-pressed=true]{background:#eee4d4;color:#211c18}
+#oeuvres .kinetic-help{position:absolute;bottom:12px;left:0;right:0;text-align:center;color:#e1d1bf;font:10px system-ui;letter-spacing:.07em;z-index:7;pointer-events:none}
+@media(max-width:760px){#oeuvres .kinetic-stage{height:560px;margin:24px 0 70px}#oeuvres .kinetic-viewport{inset:60px 0 115px}#oeuvres .kinetic-card{width:clamp(145px,45vw,220px);height:clamp(190px,58vw,285px);margin-left:calc(clamp(145px,45vw,220px)/-2);margin-top:calc(clamp(190px,58vw,285px)/-2);border-width:5px}#oeuvres .kinetic-modes{bottom:53px;gap:5px}#oeuvres .kinetic-modes button{padding:10px 12px;font-size:10px}#oeuvres .kinetic-help{font-size:9px;padding:0 8px}}
 </style>
 </head>
 <body>
@@ -215,6 +228,7 @@ footer{background:#241f1b}
       <div><div class="kicker">CHAPITRE II — LES PIÈCES</div><h2>La peinture<br><em>à nu.</em></h2></div>
       <p>Une sélection de pièces originales. Chaque œuvre possède sa propre présence, son rythme et son histoire.</p>
     </div>
+<div class="kinetic-stage" aria-label="Carrousel 3D des œuvres"><div class="kinetic-ui"><span class="kinetic-tag">NOF / KINETIC COLLECTION</span><div class="kinetic-controls"><button type="button" id="kinetic-prev" aria-label="Œuvre précédente">←</button><span id="kinetic-count">01 / 01</span><button type="button" id="kinetic-next" aria-label="Œuvre suivante">→</button></div></div><div class="kinetic-viewport" id="kinetic-viewport" tabindex="0" aria-label="Carrousel 3D : glisser pour naviguer"><div class="kinetic-ring" id="kinetic-ring"></div></div><div class="kinetic-modes" role="group" aria-label="Disposition des œuvres"><button type="button" data-kinetic-mode="circle" aria-pressed="true">Cercle</button><button type="button" data-kinetic-mode="fan" aria-pressed="false">Éventail</button><button type="button" data-kinetic-mode="tunnel" aria-pressed="false">Tunnel</button><button type="button" data-kinetic-mode="gallery" aria-pressed="false">Galerie</button></div><p class="kinetic-help">Glissez pour naviguer · Touchez une toile pour découvrir sa vue 3D</p></div>
     <div class="exhibition-invite reveal">
  <div><div class="kicker">CHAPITRE III — ENTRER DANS L’ŒUVRE</div><h3>La matière<br><em>devient espace.</em></h3><p>Parcourez une exposition virtuelle de peintures originales, choisissez un tableau et explorez ses détails.</p></div>
  <button id="virtual-exhibition-action" type="button" disabled>Visiter l’exposition 3D <span aria-hidden="true">↗</span></button>
