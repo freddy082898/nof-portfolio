@@ -35,6 +35,8 @@ share.onclick=async()=>{try{await navigator.clipboard.writeText('NOF — '+art.t
 panel.append(share);overlay.append(panel);document.body.append(overlay);
 const key=e=>{if(e.key==='Escape')close()};function close(){window.removeEventListener('keydown',key);overlay.remove()}dismiss.onclick=close;overlay.onclick=e=>{if(e.target===overlay)close()};window.addEventListener('keydown',key);
 };meta.append(detailButton);
+if(img.src){const zoomButton=document.createElement('button');zoomButton.type='button';zoomButton.textContent='Examiner les détails +';zoomButton.setAttribute('aria-label','Zoom haute définition sur '+art.title);zoomButton.style.cssText='background:#24211e;color:#fff;border:1px solid #24211e;padding:11px 13px;cursor:pointer;font-size:11px;letter-spacing:.04em;max-width:100%;white-space:normal';
+ zoomButton.onclick=async()=>{try{const {showArtworkZoom}=await import('./zoom-viewer.js');showArtworkZoom({title:art.title,imageUrl:img.src})}catch(e){console.error(e);alert('Le zoom est momentanément indisponible.')}};meta.append(zoomButton)}
 if(Number(art.width_cm)>0&&Number(art.height_cm)>0&&img.src){
  const roomButton=document.createElement('button');roomButton.type='button';roomButton.textContent='Voir chez moi';roomButton.setAttribute('aria-label','Visualiser '+art.title+' dans ma pièce');
  roomButton.style.cssText='background:transparent;border:1px solid #777;padding:11px 13px;cursor:pointer;font-size:11px;letter-spacing:.08em;white-space:nowrap;color:inherit';
