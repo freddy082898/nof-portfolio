@@ -23,7 +23,7 @@ if(viewport&&ring&&gallery){
       if(work.src){const img=document.createElement('img');img.src=work.src;img.alt=work.title;img.loading=i<3?'eager':'lazy';card.append(img)}
       else{const placeholder=document.createElement('span');placeholder.className='kinetic-placeholder';placeholder.textContent='NOF';card.append(placeholder)}
       const label=document.createElement('span');label.className='kinetic-card-title';label.textContent=work.title;card.append(label);
-      card.addEventListener('click',()=>{if(moved)return;if(i===active){document.getElementById('oeuvres')?.scrollIntoView({behavior:reduced?'instant':'smooth'});work.el?.querySelector('.work-image')?.focus({preventScroll:true})}else go(i)});
+      card.addEventListener('click',()=>{if(moved)return;if(i===active){if(work.el?.querySelector('.work-image')){work.el.querySelector('.work-image').click()}else{document.getElementById('oeuvres')?.scrollIntoView({behavior:reduced?'auto':'smooth'})}}else go(i)});
       ring.append(card);
     });
     update();
