@@ -48,7 +48,8 @@ export async function showArtwork3D({title,width_cm,height_cm,front,views=[]}){
   const fabric=new THREE.CanvasTexture(fabricCanvas);fabric.colorSpace=THREE.SRGBColorSpace;fabric.wrapS=fabric.wrapT=THREE.RepeatWrapping;fabric.repeat.set(2,4);textures.push(fabric);
   const canvasSide=new THREE.MeshStandardMaterial({map:fabric,color:0xf7f3ed,roughness:.96,metalness:0});
   const canvasTop=new THREE.MeshStandardMaterial({map:fabric,color:0xffffff,roughness:.96,metalness:0});
-  // Unlit front face: preserve the source photograph's sRGB colors without scene-light washout.\n  const painting=new THREE.MeshBasicMaterial({map:frontTex||null,color:0xffffff,toneMapped:false});
+  // Unlit front face: preserve the source photograph's sRGB colors without scene-light washout.
+  const painting=new THREE.MeshBasicMaterial({map:frontTex||null,color:0xffffff,toneMapped:false});
   const backing=new THREE.MeshStandardMaterial({map:backTex||null,color:backTex?0xffffff:0xc3b8a7,roughness:.9});
   mesh=new THREE.Mesh(geo,[canvasSide,canvasSide,canvasTop,canvasTop,painting,backing]);scene.add(mesh);loading.remove();
   // Subtle edge detail, without a fake thick black frame.
