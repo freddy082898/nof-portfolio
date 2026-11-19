@@ -29,16 +29,19 @@ export async function showVirtualGallery(artworks=[]){
  try{
  scene=new THREE.Scene();scene.background=new THREE.Color('#e9e5dc');
  camera=new THREE.PerspectiveCamera(48,1,.1,80);camera.position.set(0,1.65,0);
- renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'default'});renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.75));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.domElement.style.cssText='width:100%;height:100%;display:block;touch-action:none';stage.insertBefore(renderer.domElement,hint);
+ renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'default'});renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.75));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;renderer.domElement.style.cssText='width:100%;height:100%;display:block;touch-action:none';stage.insertBefore(renderer.domElement,hint);
  const material=(color,roughness=1)=>{const m=new THREE.MeshStandardMaterial({color,roughness});resources.push(m);return m};
- const wall=material('#eeeae2'),floor=material('#b8afa1',.83),ceiling=material('#f7f5ef'),trim=material('#d3cbbf'),frameMat=material('#312d28'),matte=material('#fbfaf7');
+ const wall=material('#eeeae2'),floor=material('#b8afa1',.83),ceiling=material('#f7f5ef'),trim=material('#d3cbbf'),frameMat=material('#312d28'),matte=material('#fbfaf7'),spotHousing=material('#393630',.52),spotGlass=new THREE.MeshBasicMaterial({color:'#fff1cf'});resources.push(spotGlass);
  const box=(w,h,d,x,y,z,m)=>{const g=new THREE.BoxGeometry(w,h,d);resources.push(g);const mesh=new THREE.Mesh(g,m);mesh.position.set(x,y,z);scene.add(mesh);return mesh};
  // 18 x 18 metre square room with four exhibition walls.
  box(18,.12,18,0,-.07,0,floor);box(18,.12,18,0,5.07,0,ceiling);box(18,5,.18,0,2.5,-9,wall);box(18,5,.18,0,2.5,9,wall);box(.18,5,18,-9,2.5,0,wall);box(.18,5,18,9,2.5,0,wall);
  box(18,.13,.14,0,.14,-8.87,trim);box(18,.13,.14,0,.14,8.87,trim);box(.14,.13,18,-8.87,.14,0,trim);box(.14,.13,18,8.87,.14,0,trim);
- scene.add(new THREE.HemisphereLight(0xffffff,0xb8ae9f,2.3));
+ scene.add(new THREE.HemisphereLight(0xffffff,0xb8ae9f,1.65));
  const ceilingLight=material('#fff8e8');for(const z of [-5,0,5])for(const x of [-5,0,5])box(1.15,.015,.23,x,4.98,z,ceilingLight);
- for(const [x,z] of [[-5,-5],[5,-5],[-5,5],[5,5]]){const light=new THREE.PointLight(0xfff5e5,24,15,2);light.position.set(x,4.2,z);scene.add(light)}
+ for(const [x,z] of [[-5,-5],[5,-5],[-5,5],[5,5]]){const light=new THREE.PointLight(0xfff5e5,12,14,2);light.position.set(x,4.2,z);scene.add(light)}
+ // Soft contact-shadow decals give the gallery a grounded look without costly real-time shadow maps on phones.
+ const shadowCanvas=document.createElement('canvas');shadowCanvas.width=128;shadowCanvas.height=128;const shadowContext=shadowCanvas.getContext('2d');const gradient=shadowContext.createRadialGradient(64,64,7,64,64,64);gradient.addColorStop(0,'rgba(40,35,28,.21)');gradient.addColorStop(.45,'rgba(40,35,28,.10)');gradient.addColorStop(1,'rgba(40,35,28,0)');shadowContext.fillStyle=gradient;shadowContext.fillRect(0,0,128,128);const shadowTexture=new THREE.CanvasTexture(shadowCanvas);textures.push(shadowTexture);const shadowMaterial=new THREE.MeshBasicMaterial({map:shadowTexture,transparent:true,depthWrite:false,opacity:.58});resources.push(shadowMaterial);const shadowGeometry=new THREE.PlaneGeometry(3.3,2.1);resources.push(shadowGeometry);
+ const addFloorShadow=(x,z)=>{const mesh=new THREE.Mesh(shadowGeometry,shadowMaterial);mesh.rotation.x=-Math.PI/2;mesh.position.set(x,.005,z);scene.add(mesh)};
  const loader=new THREE.TextureLoader();
  const slots=[];
  // Each wall has three positions, all works face the room centre.
@@ -57,6 +60,10 @@ export async function showVirtualGallery(artworks=[]){
    const aspect=Number(work.width_cm)>0&&Number(work.height_cm)>0?Number(work.width_cm)/Number(work.height_cm):texture.image.width/texture.image.height;
    const safeAspect=Math.max(.4,Math.min(3,aspect));const h=Math.min(2.4,2.65/safeAspect),w=Math.min(3.2,h*safeAspect);
    const slot=slots[i],group=new THREE.Group();group.position.set(slot.x,1.85,slot.z);group.rotation.y=slot.ry;scene.add(group);
+   const inward=new THREE.Vector3(Math.sin(slot.ry),0,Math.cos(slot.ry));const lightPosition=new THREE.Vector3(slot.x,4.55,slot.z).addScaledVector(inward,1.8);const spotlight=new THREE.SpotLight(0xfff1d9,22,7,Math.PI/5,.72,1.5);spotlight.position.copy(lightPosition);spotlight.target.position.set(slot.x,1.75,slot.z);scene.add(spotlight,spotlight.target);
+   const housing=new THREE.Mesh(new THREE.CylinderGeometry(.10,.14,.28,12),spotHousing);resources.push(housing.geometry);housing.position.copy(lightPosition);housing.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),new THREE.Vector3(slot.x,1.75,slot.z).sub(lightPosition).normalize());scene.add(housing);
+   const lens=new THREE.Mesh(new THREE.CircleGeometry(.095,16),spotGlass);resources.push(lens.geometry);lens.position.copy(lightPosition).add(new THREE.Vector3(slot.x,1.75,slot.z).sub(lightPosition).normalize().multiplyScalar(.15));lens.quaternion.copy(housing.quaternion);scene.add(lens);
+   addFloorShadow(slot.x+inward.x*.45,slot.z+inward.z*.45);
    const frame=new THREE.Mesh(new THREE.BoxGeometry(w+.13,h+.13,.09),frameMat);resources.push(frame.geometry);group.add(frame);
    const border=new THREE.Mesh(new THREE.BoxGeometry(w+.035,h+.035,.012),matte);resources.push(border.geometry);border.position.z=.052;group.add(border);
    const pictureMat=new THREE.MeshBasicMaterial({map:texture,side:THREE.FrontSide});resources.push(pictureMat);
