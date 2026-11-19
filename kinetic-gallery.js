@@ -9,6 +9,7 @@ const focusTitle=document.getElementById('kinetic-title');
 const focusSubtitle=document.getElementById('kinetic-subtitle');
 const openButton=document.getElementById('kinetic-open');
 const progress=document.getElementById('kinetic-progress-fill');
+const dots=document.getElementById('kinetic-dots');
 if(viewport&&ring&&gallery){
   let works=[],active=0,current=0,target=0,dragStart=null,lastX=0,moved=false,raf=0,lastSwipeAt=0;
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -19,7 +20,7 @@ if(viewport&&ring&&gallery){
     if(JSON.stringify(fresh.map(x=>x.src+'|'+x.title))===JSON.stringify(works.map(x=>x.src+'|'+x.title)))return;
     works=fresh;active=0;target=0;current=0;render();
   }
-  function radius(){const width=viewport.getBoundingClientRect().width||innerWidth;return Math.max(width<760?145:290,Math.min(width*.36,470))}
+  function radius(){const width=viewport.getBoundingClientRect().width||innerWidth;return Math.max(width<760?105:210,Math.min(width*.31,340))}
   function render(){
     ring.replaceChildren();
     works.forEach((work,i)=>{
@@ -30,6 +31,7 @@ if(viewport&&ring&&gallery){
       card.addEventListener('click',()=>{if(moved)return;if(i!==active){go(i);return}openActive()});
       ring.append(card);
     });
+    if(dots){dots.replaceChildren();works.forEach((work,i)=>{const dot=document.createElement('button');dot.type='button';dot.setAttribute('aria-label','Sélectionner '+work.title);dot.addEventListener('click',()=>go(i));dots.append(dot)})}
     update();
   }
   function openActive(){const work=works[active];const image=work?.el?.querySelector('.work-image');if(image)image.click()}
@@ -38,13 +40,13 @@ if(viewport&&ring&&gallery){
     const n=works.length||1,r=radius(),mobile=viewport.clientWidth<760;
     [...ring.children].forEach((card,i)=>{
       let d=i-current;if(n>1)d=((d+n*50+n/2)%n)-n/2;
-      const x=d*r*.88;
-      const y=Math.abs(d)*(mobile?7:12);
-      const z=-Math.abs(d)*(mobile?180:245);
-      const ry=-Math.sign(d)*Math.min(Math.abs(d)*17,32);
-      const scale=Math.max(.63,1-Math.abs(d)*.13);
+      const x=Math.sign(d)*r*Math.min(Math.abs(d),2.4)*(mobile?.68:1);
+      const y=Math.abs(d)*(mobile?0:4);
+      const z=-Math.abs(d)*(mobile?135:205);
+      const ry=-Math.sign(d)*Math.min(Math.abs(d)*27,56);
+      const scale=Math.max(.59,1-Math.abs(d)*.1);
       card.style.transform='translate3d('+x.toFixed(1)+'px,'+y.toFixed(1)+'px,'+z.toFixed(1)+'px) rotateY('+ry.toFixed(1)+'deg) scale('+scale.toFixed(3)+')';
-      card.style.opacity=String(Math.max(.27,1-Math.abs(d)*.28));
+      card.style.opacity=String(Math.max(.5,1-Math.abs(d)*.14));
       card.classList.toggle('is-front',i===active);
       card.style.zIndex=String(Math.round(10000+z));
       card.tabIndex=i===active?0:-1;
@@ -53,6 +55,7 @@ if(viewport&&ring&&gallery){
     if(focusTitle)focusTitle.textContent=works[active]?.title||'La collection NOF';
     if(focusSubtitle)focusSubtitle.textContent=works[active]?.el?.querySelector('.work-meta p')?.textContent?.trim()||'Œuvre originale · Collection NOF';
     if(progress)progress.style.width=((active+1)/n*100).toFixed(2)+'%';
+    if(dots)[...dots.children].forEach((dot,i)=>dot.setAttribute('aria-current',String(i===active)));
     if(openButton)openButton.disabled=!works[active]?.el;
   }
   function tick(){const delta=target-current;current=reduced?target:current+delta*.105;update();if(Math.abs(target-current)>.001){raf=requestAnimationFrame(tick)}else{current=target;update();raf=0}}
