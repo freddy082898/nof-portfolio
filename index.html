@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#171715">
+<meta name="theme-color" content="#0a0e18">
 <meta name="description" content="Portfolio d'artiste — peintures originales, matière, couleur et émotion.">
-<title>NOF — Portfolio d'art contemporain</title>
+<title>NOF — NEO GALLERY / Digital Art Space</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
@@ -73,6 +73,68 @@ a:focus-visible,button:focus-visible{outline:2px solid #bda47b;outline-offset:4p
 
 
 .exhibition-invite{display:flex;align-items:flex-end;justify-content:space-between;gap:30px;padding:clamp(28px,5vw,65px);margin:0 0 70px;background:#292722;color:#f5f0e6;position:relative;overflow:hidden}.exhibition-invite:after{content:"";position:absolute;right:-10%;top:-70%;width:50%;height:210%;border:1px solid #e5d9c333;transform:rotate(25deg);pointer-events:none}.exhibition-invite .kicker{color:#c6b497}.exhibition-invite h3{font:500 clamp(40px,5vw,74px)/1.04 var(--serif);letter-spacing:-.04em;margin:18px 0}.exhibition-invite h3 em{color:#d6c1a2}.exhibition-invite p{font-size:13px;line-height:1.8;max-width:410px;color:#d3cec4}.exhibition-invite button{position:relative;z-index:1;background:#f4efe6;color:#26231f;border:0;padding:17px 20px;cursor:pointer;min-height:52px;font-size:11px;letter-spacing:.07em;white-space:nowrap}.exhibition-invite button:disabled{opacity:.45;cursor:wait}@media(max-width:760px){.exhibition-invite{display:block;padding:30px 24px;margin-bottom:50px}.exhibition-invite button{margin-top:18px;white-space:normal;width:100%}}
+
+/* NOF — NEO GALLERY : standalone experimental preview */
+:root{--ink:#f0f3fb;--paper:#0a0e18;--muted:#99a4ba;--line:#b7c8ee29;--serif:"Playfair Display",Georgia,serif}
+html{scroll-padding-top:30px}body{background:#0a0e18;color:#f0f3fb}
+.topbar{position:absolute;z-index:20;background:linear-gradient(180deg,#080c15c9,transparent);color:#f4f7ff;border-color:#e5eaff24;padding:0 5vw;height:90px;backdrop-filter:blur(14px)}
+.brand{font:700 24px var(--sans);letter-spacing:-.075em}.brand span{font-size:9px;letter-spacing:.24em;color:#9dacc8;margin-left:13px;font-weight:500}
+.nav{gap:35px}.nav a{font-size:10px;color:#d6deef}
+.hero{background:#080c15;color:#f0f3fb;min-height:100svh;align-items:center;padding:150px 7vw 115px;isolation:isolate}
+.hero:before{background:radial-gradient(ellipse at 73% 43%,#27354c 0%,#11192a 33%,#080c15 69%),radial-gradient(ellipse at 85% 80%,#443d5a 0%,transparent 45%);z-index:-2}
+.hero:after{display:none}
+.hero-copy{z-index:4;max-width:1000px}
+.hero h1{font:500 clamp(70px,10vw,158px)/.91 var(--serif);letter-spacing:-.08em;margin:28px 0 47px;text-shadow:0 5px 60px #080c1577}
+.hero h1 em{font-weight:500;background:linear-gradient(105deg,#f5f7ff,#9fc8e3 42%,#c6b2e5 74%,#e4efff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.eyebrow{display:flex;align-items:center;gap:13px;color:#b8c8df;font-size:10px;letter-spacing:.25em}
+.neo-pulse{width:8px;height:8px;border-radius:50%;background:#b2d5f1;box-shadow:0 0 0 6px #b2d5f11c,0 0 22px #a7d4ff}
+.hero-bottom{gap:34px;justify-content:flex-start;align-items:center}
+.hero p{color:#b3bed0;font-size:14px;max-width:310px;line-height:1.8}
+.cta{background:#e7f0ff;color:#121a29;border:1px solid #e7f0ff;padding:19px 25px;min-height:58px;box-shadow:0 15px 55px #8fb7ed26;transition:transform .35s,background .35s}
+.cta:hover{background:#b9d9f3;color:#121a29;transform:translateY(-4px)}
+.neo-world{position:absolute;inset:5% 0 0 36%;perspective:1400px;pointer-events:none;z-index:1;isolation:isolate}
+.hero-art{position:absolute;right:18%;top:17%;width:min(31vw,450px);height:62%;background-size:contain;background-position:center;background-repeat:no-repeat;background-color:#f9fafc;border:10px solid #e6eaf2;box-shadow:0 55px 100px #02040bc7,0 0 90px #a8bde449;transform:rotate(-5deg) rotateY(-13deg);animation:neo-float 9s ease-in-out infinite;z-index:3}
+.hero-art:before{display:none}
+.neo-ring{position:absolute;right:5%;top:3%;width:85%;height:89%;border:1px solid #b4c8f64d;border-radius:50%;transform:rotate(-24deg);box-shadow:inset 0 0 70px #8dbbfc0b,0 0 70px #a4c7ff0b}
+.ring-b{right:-10%;top:-12%;width:116%;height:120%;transform:rotate(22deg);border-color:#8b9cc62c;border-style:dashed}
+.neo-floor{position:absolute;bottom:3%;right:4%;width:84%;height:30%;transform:rotateX(72deg);background:radial-gradient(ellipse,#b8c7f42e 0%,#a6c3ed08 44%,transparent 72%);filter:blur(13px)}
+.neo-caption{position:absolute;bottom:8%;right:10%;font-size:9px;letter-spacing:.22em;color:#b3c3dd;display:flex;gap:25px}
+.neo-caption span{color:#8da2c1}
+.scroll-note{right:4vw;color:#a4b1c8}
+.neo-status{position:absolute;bottom:24px;left:7vw;right:7vw;display:flex;justify-content:space-between;border-top:1px solid #d9e3fa29;padding-top:13px;font-size:9px;letter-spacing:.18em;color:#8f9db5}
+section{padding:130px 7vw}
+.intro{background:#101726;grid-template-columns:.85fr 1.15fr;min-height:570px}
+.intro-mark{font:700 clamp(120px,20vw,300px)/.8 var(--sans);letter-spacing:-.15em;color:#27344a;position:relative}
+.neo-infinity{font:300 70px var(--sans);position:absolute;top:-35px;right:5%;color:#9ab6d6}
+.intro-copy h2{font-size:clamp(42px,4.7vw,67px);color:#f2f4fa}
+.intro-copy p{color:#a8b3c8;font-size:14px}
+.kicker{color:#a2b8d8;font-weight:600;letter-spacing:.24em}
+#oeuvres{background:linear-gradient(180deg,#0a0e18,#10192a)}
+.section-head{border-color:#dce6ff32}.section-head h2{font-size:clamp(56px,7vw,105px);line-height:.99}
+.section-head h2 em{color:#a9c6e5;font-weight:500}.section-head p{color:#a6b3c9}
+.work-grid{gap:110px 7vw}.work-card:nth-child(even){margin-top:130px}
+.work-image{background:linear-gradient(145deg,#1c2a40,#111928);border:1px solid #9db8dd43;box-shadow:0 28px 80px #02040d6b;transition:transform .7s,box-shadow .7s}
+.work-image:hover{transform:translateY(-12px);box-shadow:0 35px 110px #91b8f12c}
+.work-image img{background:#f5f5f4!important;padding:clamp(16px,2.4vw,38px)}
+.work-meta h3{font-size:clamp(26px,3vw,40px)}.work-meta p,.work-no{color:#9aaac2}
+.work-meta button{border-color:#a6b9d2!important;color:#eef4ff!important;background:transparent!important}
+.work-meta button:hover{background:#283c57!important}
+.exhibition-invite{background:radial-gradient(ellipse at 80% 40%,#344563,#151d2d 70%);border:1px solid #a7bee350;color:#f2f5fb;min-height:400px;align-items:center}
+.exhibition-invite:after{border-color:#bdd7ff4d;border-radius:50%;width:50%;height:135%;top:-15%;right:-6%;transform:rotate(-28deg)}
+.exhibition-invite .kicker{color:#afc9eb}.exhibition-invite h3{font-size:clamp(50px,6vw,88px)}
+.exhibition-invite h3 em{color:#aac8e9}.exhibition-invite p{color:#b5c5dd}
+.exhibition-invite button{background:#e9f0fc;color:#151d2d;padding:20px 25px}
+.statement{background:#131d2b}.statement blockquote em{color:#acc9eb}
+.about{background:#0c1320}.about-copy p{color:#b2bfd2}.portrait{background:linear-gradient(135deg,#7083a0,#293d5d 55%,#101827)}
+.contact{background:#182438}.contact-right p{color:#b6c4d7}.contact-link{border-color:#d4e4fb}
+footer{background:#080c15;color:#a9b8cf}
+.reveal{transform:translateY(32px);transition:opacity .9s,transform .9s cubic-bezier(.2,.7,.2,1)}
+@keyframes neo-float{0%,100%{transform:translateY(0) rotate(-5deg) rotateY(-13deg)}50%{transform:translateY(-19px) rotate(-3deg) rotateY(-8deg)}}
+@media(max-width:900px){.neo-world{inset:5% -12% 0 26%}.hero-art{width:39vw;top:16%;right:19%;height:46%}.hero-copy{align-self:flex-end}.hero h1{font-size:clamp(66px,11vw,108px)}}
+@media(max-width:760px){.topbar{height:68px}.nav{background:#101827;box-shadow:0 18px 30px #0008}.menu{color:#e9f1ff}.hero{min-height:100svh;padding:105px 7vw 90px;align-items:flex-end}.neo-world{inset:4% -27% 36% 0}.hero-art{width:45vw;height:55%;right:35%;top:16%;border-width:7px}.neo-ring{width:82%;right:13%;height:85%}.ring-b{width:110%;right:0}.neo-caption{bottom:1%;right:30%;font-size:7px;gap:10px}.hero h1{font-size:clamp(57px,13vw,86px);margin:20px 0 22px}.hero-copy{width:100%}.eyebrow{font-size:8px;letter-spacing:.13em}.hero-bottom{align-items:flex-start;gap:17px}.hero p{font-size:12px;line-height:1.65;max-width:300px}.cta{padding:16px 18px;min-height:48px;font-size:9px}.neo-status{bottom:20px;font-size:7px}.scroll-note{display:none}.intro{grid-template-columns:1fr;gap:25px;min-height:0}.intro-mark{font-size:125px}.neo-infinity{font-size:40px;top:-20px;left:195px;right:auto}.section-head h2{font-size:clamp(54px,12vw,83px)}.work-grid{gap:70px}.work-card:nth-child(even){margin-top:0}.work-image:hover{transform:none}.exhibition-invite{min-height:0}.exhibition-invite h3{font-size:54px}.contact h2{font-size:64px}}
+@media(max-width:380px){.neo-world{inset:2% -36% 39% 0}.hero-art{width:46vw}.hero h1{font-size:55px}}
+@media(prefers-reduced-motion:reduce){.hero-art{animation:none}.reveal,.work-image,.cta{transition:none}}
+
 </style>
 </head>
 <body>
@@ -83,22 +145,22 @@ a:focus-visible,button:focus-visible{outline:2px solid #bda47b;outline-offset:4p
 </header>
 <main>
   <section class="hero">
-    <div class="hero-art" aria-hidden="true"></div>
+    <div class="neo-world" aria-hidden="true"><div class="neo-ring ring-a"></div><div class="neo-ring ring-b"></div><div class="neo-floor"></div><div class="hero-art"></div><div class="neo-caption">ART OBJECT / NOF—001 <span>◉ DIGITAL EDITION</span></div></div>
     <div class="hero-copy">
-      <div class="eyebrow">NOF — Galerie d’art contemporain · Pièces originales</div>
-      <h1>La matière<br>devient <em>émotion.</em></h1>
+      <div class="eyebrow"><span class="neo-pulse"></span> NOF / NEO GALLERY — DIGITAL ART SPACE</div>
+      <h1>Beyond<br>the <em>visible.</em></h1>
       <div class="hero-bottom">
-        <p>Des œuvres singulières où la texture, la lumière et le contraste racontent ce que les mots ne savent pas toujours dire.</p>
-        <a class="cta" href="#oeuvres">Explorer les œuvres <span>↘</span></a>
+        <p>L’art, la matière et l’espace se rencontrent. Une nouvelle façon de découvrir des œuvres originales.</p>
+        <a class="cta" href="#oeuvres">Explorer la collection <span>↗</span></a>
       </div>
     </div>
-    <div class="scroll-note">DÉCOUVRIR LA COLLECTION ↓</div>
+    <div class="scroll-note">SCROLL TO ENTER / 01 — 04 ↓</div><div class="neo-status"><span>NOF / 2026</span><span>ART IS AN EXPERIENCE — NOT A SCREEN</span></div>
   </section>
 
   <section class="intro" id="demarche">
-    <div class="intro-mark reveal">Créer.<br>Ressentir.</div>
+    <div class="intro-mark reveal">NOF<span class="neo-infinity">∞</span></div>
     <div class="intro-copy reveal">
-      <div class="kicker">01 — La démarche</div>
+      <div class="kicker">01 / ARTIST VISION</div>
       <h2>Une recherche entre équilibre et intensité.</h2>
       <p>Chaque toile est une exploration. Les couches se répondent, les matières se rencontrent et les contrastes donnent naissance à un langage visuel personnel. Une peinture pensée pour être contemplée, ressentie et habitée.</p>
     </div>
@@ -106,11 +168,11 @@ a:focus-visible,button:focus-visible{outline:2px solid #bda47b;outline-offset:4p
 
   <section id="oeuvres">
     <div class="section-head reveal">
-      <div><div class="kicker">02 — Sélection</div><h2>Œuvres choisies<span style="color:#a9987e">.</span></h2></div>
+      <div><div class="kicker">02 / THE COLLECTION</div><h2>Selected<br><em>artifacts.</em></h2></div>
       <p>Une sélection de pièces originales. Chaque œuvre possède sa propre présence, son rythme et son histoire.</p>
     </div>
     <div class="exhibition-invite reveal">
- <div><div class="kicker">NOF / EXPÉRIENCE IMMERSIVE</div><h3>Entrez dans<br><em>la galerie.</em></h3><p>Parcourez une exposition virtuelle de peintures originales, choisissez un tableau et explorez ses détails.</p></div>
+ <div><div class="kicker">PORTAL 03 / IMMERSIVE EXPERIENCE</div><h3>Enter the<br><em>dimension.</em></h3><p>Parcourez une exposition virtuelle de peintures originales, choisissez un tableau et explorez ses détails.</p></div>
  <button id="virtual-exhibition-action" type="button" disabled>Visiter l’exposition 3D <span aria-hidden="true">↗</span></button>
  </div>
  <div class="work-grid" id="nof-gallery"><p>Chargement de la collection…</p></div>
@@ -124,7 +186,7 @@ a:focus-visible,button:focus-visible{outline:2px solid #bda47b;outline-offset:4p
   <section class="about" id="apropos">
     <div class="portrait reveal"></div>
     <div class="about-copy reveal">
-      <div class="kicker">03 — L'artiste</div>
+      <div class="kicker">03 / THE ARTIST</div>
       <h2>Un regard.<br>Une matière.<br><em style="font-weight:500">Une signature.</em></h2>
       <p>Je développe un univers pictural guidé par l'expérimentation, la sensibilité et le goût du détail. À travers la peinture acrylique, je compose des espaces où les formes, les textures et les lumières invitent chacun à sa propre interprétation.</p>
       <p style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#9b907f">Artiste peintre · Œuvres originales</p>
@@ -132,7 +194,7 @@ a:focus-visible,button:focus-visible{outline:2px solid #bda47b;outline-offset:4p
   </section>
 
   <section class="contact" id="contact">
-    <div><div class="kicker">04 — Entrer en contact</div><h2>Une œuvre<br>vous appelle ?</h2></div>
+    <div><div class="kicker">04 / CONNECT</div><h2>Une œuvre<br>vous appelle ?</h2></div>
     <div class="contact-right"><p>Pour une acquisition, une collaboration ou simplement échanger autour de mon travail, je serai heureux de vous lire.</p><a class="contact-link" href="mailto:bonjour@atelier-artiste.fr">Écrire un message ↗</a></div>
   </section>
 </main>
