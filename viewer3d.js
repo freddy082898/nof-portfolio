@@ -11,8 +11,11 @@ export async function showArtwork3D({title,width_cm,height_cm,front,views=[]}){
  header.append(name,close);
  const stage=document.createElement('div');stage.style.cssText='position:relative;flex:1;min-height:0;touch-action:none;cursor:grab;overflow:hidden';
  const footer=document.createElement('footer');footer.style.cssText='display:block;flex:none;background:#e9e6e0;padding:14px 20px 24px;text-align:center;font-size:13px;color:#555';
- footer.textContent='Tourner avec un doigt · Zoomer avec deux doigts';
- modal.append(header,stage,footer);document.body.append(modal);
+ footer.textContent='Tourner avec un doigt · Zoomer avec deux doigts · Épaisseur indicative';
+ const actions=document.createElement('div');actions.style.cssText='display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:8px 12px;background:#e9e6e0';
+ const action=(label)=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.style.cssText='border:1px solid #aaa;border-radius:22px;background:#f8f6f2;color:#282622;padding:9px 14px;cursor:pointer;font:12px system-ui';actions.append(b);return b};
+ const frontButton=action('Face'),sideButton=action('Profil'),backButton=action('Dos'),resetButton=action('Réinitialiser');
+ modal.append(header,stage,actions,footer);document.body.append(modal);
  let renderer,scene,camera,mesh,geo,edgeGeo,edgeMat,frameGeo,frameMat,raf=0,disposed=false,observer,resize=()=>{},textures=[];
  const key=e=>{if(e.key==='Escape')destroy()};
  function destroy(){if(disposed)return;disposed=true;cancelAnimationFrame(raf);observer?.disconnect();window.removeEventListener('keydown',key);geo?.dispose();edgeGeo?.dispose();edgeMat?.dispose();frameGeo?.dispose();frameMat?.dispose();mesh?.material?.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());renderer?.dispose();modal.remove()}
@@ -35,37 +38,43 @@ export async function showArtwork3D({title,width_cm,height_cm,front,views=[]}){
   const measured=Number(width_cm)>0&&Number(height_cm)>0;
   const imageAspect=frontTex?.image?.width&&frontTex?.image?.height?frontTex.image.width/frontTex.image.height:1;
   const aspect=measured?Number(width_cm)/Number(height_cm):imageAspect;
-  const h=2.65,w=h*Math.max(.3,Math.min(3.2,aspect)),depth=measured?Math.min(.22,Math.max(.045,Number(width_cm)/Number(height_cm)*.11)):.105;
+  const h=2.65,w=h*Math.max(.3,Math.min(3.2,aspect)),depth=measured?Math.max(.045,Math.min(.2,h*2.5/Number(height_cm))):.105;
   geo=new THREE.BoxGeometry(w,h,depth);
   // Material order of BoxGeometry: +X,-X,+Y,-Y,+Z,-Z.
-  const canvasSide=new THREE.MeshStandardMaterial({color:0xe4dfd6,roughness:.92});
-  const canvasTop=new THREE.MeshStandardMaterial({color:0xeae6dd,roughness:.95});
-  const painting=new THREE.MeshBasicMaterial({map:frontTex||null,color:0xffffff});
+  const fabricCanvas=document.createElement('canvas');fabricCanvas.width=fabricCanvas.height=128;
+  const fctx=fabricCanvas.getContext('2d');fctx.fillStyle='#e4dfd6';fctx.fillRect(0,0,128,128);
+  for(let i=0;i<128;i+=4){fctx.fillStyle='rgba(125,112,95,.13)';fctx.fillRect(i,0,1,128);fctx.fillRect(0,i,128,1);fctx.fillStyle='rgba(255,255,255,.32)';fctx.fillRect(i+1,0,1,128);fctx.fillRect(0,i+1,128,1)}
+  const fabric=new THREE.CanvasTexture(fabricCanvas);fabric.colorSpace=THREE.SRGBColorSpace;fabric.wrapS=fabric.wrapT=THREE.RepeatWrapping;fabric.repeat.set(2,4);textures.push(fabric);
+  const canvasSide=new THREE.MeshStandardMaterial({map:fabric,color:0xf7f3ed,roughness:.96,metalness:0});
+  const canvasTop=new THREE.MeshStandardMaterial({map:fabric,color:0xffffff,roughness:.96,metalness:0});
+  const painting=new THREE.MeshStandardMaterial({map:frontTex||null,color:0xffffff,roughness:.82,metalness:0,emissive:0xffffff,emissiveIntensity:.18,emissiveMap:frontTex||null});
   const backing=new THREE.MeshStandardMaterial({map:backTex||null,color:backTex?0xffffff:0xc3b8a7,roughness:.9});
   mesh=new THREE.Mesh(geo,[canvasSide,canvasSide,canvasTop,canvasTop,painting,backing]);scene.add(mesh);
   // Subtle edge detail, without a fake thick black frame.
   edgeGeo=new THREE.EdgesGeometry(geo);edgeMat=new THREE.LineBasicMaterial({color:0xb5aa9b,transparent:true,opacity:.55});
   mesh.add(new THREE.LineSegments(edgeGeo,edgeMat));
-  let yaw=-.26,pitch=.08,distance=8,targetDistance=8,zoomFactor=1,velocityX=0,velocityY=0;
+  let yaw=-.26,pitch=.08,zoomFactor=1,velocityX=0,velocityY=0,targetYaw=yaw,targetPitch=pitch,autoTarget=false;
+  const go=(y,p)=>{targetYaw=y;targetPitch=p;autoTarget=true;velocityX=velocityY=0};
+  frontButton.onclick=()=>go(0,0);sideButton.onclick=()=>go(-Math.PI/2,0);backButton.onclick=()=>go(-Math.PI,0);resetButton.onclick=()=>{zoomFactor=1;resize();go(-.26,.08)};
   const pointers=new Map();let pinchDistance=0;
   stage.addEventListener('pointerdown',e=>{stage.setPointerCapture(e.pointerId);pointers.set(e.pointerId,[e.clientX,e.clientY]);stage.style.cursor='grabbing'});
   stage.addEventListener('pointermove',e=>{
    if(!pointers.has(e.pointerId))return;
    const prev=pointers.get(e.pointerId);pointers.set(e.pointerId,[e.clientX,e.clientY]);
    if(pointers.size===2){const p=[...pointers.values()];const d=Math.hypot(p[0][0]-p[1][0],p[0][1]-p[1][1]);if(pinchDistance)zoomFactor=Math.max(.55,Math.min(2.5,zoomFactor*d/pinchDistance));resize();pinchDistance=d;return}
-   pinchDistance=0;velocityX=(e.clientX-prev[0])*.007;velocityY=(e.clientY-prev[1])*.006;yaw+=velocityX;pitch=Math.max(-1.35,Math.min(1.35,pitch+velocityY));
+   pinchDistance=0;autoTarget=false;velocityX=(e.clientX-prev[0])*.007;velocityY=(e.clientY-prev[1])*.006;yaw+=velocityX;pitch=Math.max(-1.35,Math.min(1.35,pitch+velocityY));
   });
   const release=e=>{pointers.delete(e.pointerId);if(pointers.size<2)pinchDistance=0;if(!pointers.size)stage.style.cursor='grab'};
   stage.addEventListener('pointerup',release);stage.addEventListener('pointercancel',release);
   stage.addEventListener('wheel',e=>{e.preventDefault();zoomFactor=Math.max(.55,Math.min(2.5,zoomFactor*(1-e.deltaY*.001)));resize()},{passive:false});
   resize=()=>{if(disposed)return;const rect=stage.getBoundingClientRect();if(!rect.width||!rect.height)return;renderer.setSize(rect.width,rect.height,true);
    // Fit the entire rotated canvas in both axes, including its corners.
-   const aspect=rect.width/rect.height,diagonal=Math.hypot(w,h,depth),padding=1.55;
+   const aspect=rect.width/rect.height,diagonal=Math.hypot(w,h,depth),padding=1.45;
    const visibleHeight=Math.max(h*padding,diagonal*padding,diagonal*padding/aspect)/zoomFactor;
    const halfHeight=visibleHeight/2;
    camera.left=-halfHeight*aspect;camera.right=halfHeight*aspect;camera.top=halfHeight;camera.bottom=-halfHeight;camera.updateProjectionMatrix();
   };
   observer=new ResizeObserver(resize);observer.observe(stage);resize();
-  function animate(){if(disposed)return;raf=requestAnimationFrame(animate);if(!pointers.size){yaw+=velocityX;pitch=Math.max(-1.35,Math.min(1.35,pitch+velocityY));velocityX*=.89;velocityY*=.89}distance+=(targetDistance-distance)*.12;mesh.rotation.set(pitch,yaw,0);camera.position.set(0,0,8);camera.lookAt(0,0,0);renderer.render(scene,camera)}animate();
+  function animate(){if(disposed)return;raf=requestAnimationFrame(animate);if(!pointers.size){yaw+=velocityX;pitch=Math.max(-1.35,Math.min(1.35,pitch+velocityY));velocityX*=.89;velocityY*=.89}if(autoTarget){yaw+=(targetYaw-yaw)*.16;pitch+=(targetPitch-pitch)*.16;if(Math.abs(targetYaw-yaw)+Math.abs(targetPitch-pitch)<.002)autoTarget=false}mesh.rotation.set(pitch,yaw,0);camera.position.set(0,0,8);camera.lookAt(0,0,0);renderer.render(scene,camera)}animate();
  }catch(e){console.error('NOF viewer',e);footer.textContent='La visualisation 3D n’est pas disponible sur cet appareil.'}
 }
