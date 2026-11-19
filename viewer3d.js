@@ -16,6 +16,7 @@ export async function showArtwork3D({title,width_cm,height_cm,front,views=[]}){
  const action=(label)=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.style.cssText='border:1px solid #aaa;border-radius:22px;background:#f8f6f2;color:#282622;padding:9px 14px;cursor:pointer;font:12px system-ui';actions.append(b);return b};
  const frontButton=action('Face'),sideButton=action('Profil'),backButton=action('Dos'),resetButton=action('Réinitialiser');
  modal.append(header,stage,actions,footer);document.body.append(modal);
+ const loading=document.createElement('div');loading.setAttribute('role','status');loading.textContent='Chargement de la toile 3D…';loading.style.cssText='position:absolute;inset:0;display:grid;place-items:center;color:#555;font:14px system-ui;pointer-events:none';stage.append(loading);
  let renderer,scene,camera,mesh,geo,edgeGeo,edgeMat,frameGeo,frameMat,raf=0,disposed=false,observer,resize=()=>{},textures=[];
  const key=e=>{if(e.key==='Escape')destroy()};
  function destroy(){if(disposed)return;disposed=true;cancelAnimationFrame(raf);observer?.disconnect();window.removeEventListener('keydown',key);geo?.dispose();edgeGeo?.dispose();edgeMat?.dispose();frameGeo?.dispose();frameMat?.dispose();mesh?.material?.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());renderer?.dispose();modal.remove()}
@@ -31,7 +32,7 @@ export async function showArtwork3D({title,width_cm,height_cm,front,views=[]}){
   const rim=new THREE.DirectionalLight(0xffffff,.35);rim.position.set(3,2,-5);scene.add(rim);
   const loader=new THREE.TextureLoader();
   async function load(url){if(!url)return null;try{const t=await loader.loadAsync(url);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());textures.push(t);return t}catch(e){console.warn('NOF photo unavailable',e);return null}}
-  const frontTex=await load(front||views[0]);if(disposed)return;
+  const frontTex=await load(front||views[0]);if(disposed)return;if(!frontTex){loading.textContent='Image indisponible. Réessayez en rouvrant la toile.';return}
   // Do not stretch an oblique photo onto a flat side: it introduces perspective twice.
   // A back photograph is only used when explicitly supplied in the standard slot.
   const backTex=null; // Rear photo is not mapped until the admin explicitly labels/calibrates it.
@@ -49,7 +50,7 @@ export async function showArtwork3D({title,width_cm,height_cm,front,views=[]}){
   const canvasTop=new THREE.MeshStandardMaterial({map:fabric,color:0xffffff,roughness:.96,metalness:0});
   // Unlit front face: preserve the source photograph's sRGB colors without scene-light washout.\n  const painting=new THREE.MeshBasicMaterial({map:frontTex||null,color:0xffffff,toneMapped:false});
   const backing=new THREE.MeshStandardMaterial({map:backTex||null,color:backTex?0xffffff:0xc3b8a7,roughness:.9});
-  mesh=new THREE.Mesh(geo,[canvasSide,canvasSide,canvasTop,canvasTop,painting,backing]);scene.add(mesh);
+  mesh=new THREE.Mesh(geo,[canvasSide,canvasSide,canvasTop,canvasTop,painting,backing]);scene.add(mesh);loading.remove();
   // Subtle edge detail, without a fake thick black frame.
   edgeGeo=new THREE.EdgesGeometry(geo);edgeMat=new THREE.LineBasicMaterial({color:0xb5aa9b,transparent:true,opacity:.55});
   mesh.add(new THREE.LineSegments(edgeGeo,edgeMat));
@@ -76,5 +77,5 @@ export async function showArtwork3D({title,width_cm,height_cm,front,views=[]}){
   };
   observer=new ResizeObserver(resize);observer.observe(stage);resize();
   function animate(){if(disposed)return;raf=requestAnimationFrame(animate);if(!pointers.size){yaw+=velocityX;pitch=Math.max(-1.35,Math.min(1.35,pitch+velocityY));velocityX*=.89;velocityY*=.89}if(autoTarget){yaw+=(targetYaw-yaw)*.16;pitch+=(targetPitch-pitch)*.16;if(Math.abs(targetYaw-yaw)+Math.abs(targetPitch-pitch)<.002)autoTarget=false}mesh.rotation.set(pitch,yaw,0);camera.position.set(0,0,8);camera.lookAt(0,0,0);renderer.render(scene,camera)}animate();
- }catch(e){console.error('NOF viewer',e);footer.textContent='La visualisation 3D n’est pas disponible sur cet appareil.'}
+ }catch(e){console.error('NOF viewer',e);loading.textContent='Impossible de charger la vue 3D. Fermez puis réessayez.';footer.textContent='La visualisation 3D n’est pas disponible sur cet appareil.'}
 }
