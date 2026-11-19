@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#171715">
+<meta name="theme-color" content="#e7e1d6">
 <meta name="description" content="Portfolio d'artiste — peintures originales, matière, couleur et émotion.">
-<title>NOF — Portfolio d'art contemporain</title>
+<title>NOF — RAW MATTER / Matière vivante</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
@@ -73,6 +73,70 @@ a:focus-visible,button:focus-visible{outline:2px solid #bda47b;outline-offset:4p
 
 
 .exhibition-invite{display:flex;align-items:flex-end;justify-content:space-between;gap:30px;padding:clamp(28px,5vw,65px);margin:0 0 70px;background:#292722;color:#f5f0e6;position:relative;overflow:hidden}.exhibition-invite:after{content:"";position:absolute;right:-10%;top:-70%;width:50%;height:210%;border:1px solid #e5d9c333;transform:rotate(25deg);pointer-events:none}.exhibition-invite .kicker{color:#c6b497}.exhibition-invite h3{font:500 clamp(40px,5vw,74px)/1.04 var(--serif);letter-spacing:-.04em;margin:18px 0}.exhibition-invite h3 em{color:#d6c1a2}.exhibition-invite p{font-size:13px;line-height:1.8;max-width:410px;color:#d3cec4}.exhibition-invite button{position:relative;z-index:1;background:#f4efe6;color:#26231f;border:0;padding:17px 20px;cursor:pointer;min-height:52px;font-size:11px;letter-spacing:.07em;white-space:nowrap}.exhibition-invite button:disabled{opacity:.45;cursor:wait}@media(max-width:760px){.exhibition-invite{display:block;padding:30px 24px;margin-bottom:50px}.exhibition-invite button{margin-top:18px;white-space:normal;width:100%}}
+
+/* NOF / RAW MATTER — independent experimental editorial preview */
+:root{--paper:#e7e1d6;--ink:#231f1b;--line:#231f1b38;--serif:Georgia,"Times New Roman",serif}
+html{scroll-padding-top:25px}body{background:var(--paper);color:var(--ink)}
+.topbar{height:80px;position:absolute;z-index:12;color:#f2eadd;border-color:#f4e7d33b;padding-inline:4.5vw;mix-blend-mode:normal}
+.brand{font:800 29px/1 var(--sans);letter-spacing:-.105em}.brand span{font-size:9px;letter-spacing:.2em;margin-left:15px;font-weight:500}
+.nav a{font-size:10px;letter-spacing:.16em}
+.hero{min-height:100svh;position:relative;background:#211d19;color:#f1e9dc;padding:150px 5vw 90px;align-items:center;isolation:isolate}
+.hero:before,.hero:after{display:none}
+.raw-art-space{position:absolute;inset:0;overflow:hidden;z-index:-1;background:radial-gradient(ellipse at 70% 44%,#887765,#332c25 55%,#1b1815 100%)}
+.raw-art-track{position:absolute;inset:-18%;transform:scale(calc(1.55 - var(--raw-progress,0) * .4));transition:transform .15s linear;filter:saturate(.8)}
+.hero-art{position:absolute;inset:0;width:100%;height:100%;top:0;right:0;transform:none!important;box-shadow:none;border:0;background-size:cover;background-position:center;background-repeat:no-repeat;background-color:#665a4d;opacity:.83}
+.hero-art:before{display:none}.hero-art.has-artwork{background-blend-mode:normal}
+.raw-art-space:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#181511c9 0%,#18151173 47%,#18151123 100%),linear-gradient(0deg,#181511a6,transparent 36%)}
+.raw-art-grain{position:absolute;inset:0;opacity:.12;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");pointer-events:none;z-index:2}
+.raw-art-label{position:absolute;right:5vw;top:115px;z-index:3;font:9px var(--sans);letter-spacing:.2em;color:#f4ebdcba;writing-mode:vertical-rl}
+.hero-copy{max-width:100%;width:100%;z-index:3}
+.hero h1{font:900 clamp(78px,13vw,205px)/.78 var(--sans);letter-spacing:-.105em;margin:30px 0 50px;max-width:none}
+.hero h1 em{font:italic 500 .69em/.92 var(--serif);letter-spacing:-.085em;color:#e9c7a2;padding-left:12vw;display:inline-block}
+.raw-stop{color:#cba67f}
+.eyebrow{color:#e3d4bf;font-weight:600;letter-spacing:.26em;font-size:10px}
+.hero-bottom{display:flex;justify-content:space-between;align-items:end;gap:30px;border-top:1px solid #f4e6d25c;padding-top:25px}
+.hero p{max-width:360px;color:#e6dbcd;font-size:14px;line-height:1.85}
+.cta{background:#e9dfce;color:#27211b;border:1px solid #e9dfce;padding:19px 23px;min-height:58px;font-weight:700;transition:transform .3s,background .3s}
+.cta:hover{background:#d4b68e;color:#201c18;transform:translateY(-4px)}
+.scroll-note{display:none}
+.raw-hero-counter{position:absolute;bottom:22px;left:5vw;right:5vw;display:flex;justify-content:space-between;font-size:9px;letter-spacing:.2em;color:#d9c8b5}
+section{padding:135px 6vw}
+.intro{background:#e9e2d6;grid-template-columns:.9fr 1.1fr;gap:9vw;min-height:600px}
+.intro-mark{font:900 clamp(100px,13vw,220px)/.78 var(--sans);letter-spacing:-.12em;color:#c5b7a4;position:relative}
+.raw-star{font:normal 65px var(--sans);position:absolute;top:-45px;right:10%;color:#8e6b4f}
+.intro-copy h2{font-size:clamp(42px,5vw,73px);letter-spacing:-.06em}
+.intro-copy p{font-size:15px;line-height:1.9;color:#665d52}
+.kicker{font-weight:700;color:#826e5b;letter-spacing:.2em}
+#oeuvres{background:#e7e1d6}
+.section-head{border-color:#5e514345}.section-head h2{font:900 clamp(70px,9vw,150px)/.82 var(--sans);letter-spacing:-.09em}
+.section-head h2 em{font:italic 500 .95em var(--serif);color:#8b6e55}
+.section-head p{font-size:13px;color:#665b50}
+.work-grid{grid-template-columns:1fr 1fr;gap:140px 6vw}
+.work-card:nth-child(even){margin-top:175px}
+.work-image{background:#d8cfc1;box-shadow:0 25px 65px #332a1d22;transition:transform .7s cubic-bezier(.2,.8,.2,1),box-shadow .7s}
+.work-image:hover{transform:translateY(-12px) rotate(-.8deg);box-shadow:0 35px 90px #332a1d35}
+.work-image img{background:#e7e1d6!important;padding:clamp(14px,2.4vw,34px)}
+.work-meta h3{font:italic 500 clamp(30px,3.3vw,50px) var(--serif)}
+.work-meta p{color:#766a5d}
+.exhibition-invite{background:#2c2721;color:#f1e9dc;min-height:420px;align-items:center;border-left:10px solid #bd9872}
+.exhibition-invite:after{width:46%;height:150%;right:-6%;top:-25%;border-color:#d6b89848;transform:rotate(30deg)}
+.exhibition-invite h3{font:900 clamp(54px,7vw,100px)/.9 var(--sans);letter-spacing:-.075em}
+.exhibition-invite h3 em{font:italic 500 .85em var(--serif);color:#d8b692}
+.exhibition-invite p{color:#d6c8b9}
+.exhibition-invite button{background:#e8dccb;color:#26211c;padding:20px 25px}
+.statement{background:#a7886b;color:#241f1a}.statement .kicker{color:#3c3025}
+.statement blockquote{font:italic 500 clamp(43px,6vw,86px)/1.08 var(--serif)}
+.statement blockquote em{color:#f8ebda}
+.about{background:#e7e1d6}.about-copy h2{font-size:clamp(52px,6vw,85px)}
+.portrait{background:linear-gradient(135deg,#cbb69e,#9c8068 55%,#3c3027)}
+.contact{background:#d4c6b5}.contact h2{font:900 clamp(70px,9vw,135px)/.86 var(--sans);letter-spacing:-.09em}
+footer{background:#241f1b}
+.reveal{transform:translateY(42px);transition:opacity .9s,transform .9s cubic-bezier(.2,.7,.2,1)}
+@media(max-width:900px){.hero h1{font-size:clamp(74px,12.5vw,145px)}.hero h1 em{padding-left:6vw}}
+@media(max-width:760px){.topbar{height:68px;padding:0 6vw}.brand{font-size:24px}.nav{background:#241f1b}.hero{min-height:100svh;padding:115px 6vw 80px;align-items:center}.hero h1{font-size:clamp(64px,15.1vw,108px);line-height:.88;margin:30px 0 35px}.hero h1 em{padding-left:4vw}.hero-bottom{display:flex;flex-direction:column;align-items:flex-start;gap:18px}.hero p{font-size:12px;line-height:1.65;max-width:300px}.cta{padding:15px 18px;min-height:48px;font-size:9px}.raw-art-track{inset:-9%;transform:scale(calc(1.4 - var(--raw-progress,0) * .3))}.raw-art-space:after{background:linear-gradient(90deg,#181511c7,#18151166),linear-gradient(0deg,#181511c2,transparent 65%)}.raw-hero-counter{font-size:7px;bottom:18px}.raw-art-label{right:6vw;top:90px;font-size:7px}section{padding:85px 7vw}.intro{grid-template-columns:1fr;gap:40px;min-height:0}.intro-mark{font-size:120px}.raw-star{font-size:40px;top:-20px;left:240px;right:auto}.section-head h2{font-size:clamp(65px,14vw,100px)}.work-grid{grid-template-columns:1fr;gap:75px}.work-card:nth-child(even){margin-top:0}.work-image:hover{transform:none}.exhibition-invite{min-height:0}.exhibition-invite h3{font-size:56px}.contact h2{font-size:75px}}
+@media(max-width:380px){.hero h1{font-size:61px}.hero-bottom{gap:10px}.raw-hero-counter{letter-spacing:.07em}}
+@media(prefers-reduced-motion:reduce){.raw-art-track{transition:none;transform:scale(1.2)}.reveal,.work-image,.cta{transition:none}}
+
 </style>
 </head>
 <body>
@@ -83,22 +147,22 @@ a:focus-visible,button:focus-visible{outline:2px solid #bda47b;outline-offset:4p
 </header>
 <main>
   <section class="hero">
-    <div class="hero-art" aria-hidden="true"></div>
+    <div class="raw-art-space" aria-hidden="true"><div class="raw-art-track"><div class="hero-art"></div></div><div class="raw-art-grain"></div><div class="raw-art-label">ÉTUDE DE MATIÈRE / NOF — 001</div></div>
     <div class="hero-copy">
-      <div class="eyebrow">NOF — Galerie d’art contemporain · Pièces originales</div>
-      <h1>La matière<br>devient <em>émotion.</em></h1>
+      <div class="eyebrow">NOF / 001 — UN MANIFESTE DE MATIÈRE</div>
+      <h1>REGARDER<br><em>DE PLUS</em><br>PRÈS<span class="raw-stop">.</span></h1>
       <div class="hero-bottom">
-        <p>Des œuvres singulières où la texture, la lumière et le contraste racontent ce que les mots ne savent pas toujours dire.</p>
-        <a class="cta" href="#oeuvres">Explorer les œuvres <span>↘</span></a>
+        <p>Une peinture ne se regarde pas seulement. Elle se découvre couche après couche, trace après trace.</p>
+        <a class="cta" href="#oeuvres">Dévoiler les œuvres <span>↓</span></a>
       </div>
     </div>
-    <div class="scroll-note">DÉCOUVRIR LA COLLECTION ↓</div>
+    <div class="scroll-note">FAITES DÉFILER POUR DÉCOUVRIR ↓</div><div class="raw-hero-counter"><span>MATIÈRE / GESTE / ÉMOTION</span><span>NOF — COLLECTION 2026</span></div>
   </section>
 
   <section class="intro" id="demarche">
-    <div class="intro-mark reveal">Créer.<br>Ressentir.</div>
+    <div class="intro-mark reveal">LA<br>TRACE<span class="raw-star">✳</span></div>
     <div class="intro-copy reveal">
-      <div class="kicker">01 — La démarche</div>
+      <div class="kicker">CHAPITRE I — LE GESTE</div>
       <h2>Une recherche entre équilibre et intensité.</h2>
       <p>Chaque toile est une exploration. Les couches se répondent, les matières se rencontrent et les contrastes donnent naissance à un langage visuel personnel. Une peinture pensée pour être contemplée, ressentie et habitée.</p>
     </div>
@@ -106,11 +170,11 @@ a:focus-visible,button:focus-visible{outline:2px solid #bda47b;outline-offset:4p
 
   <section id="oeuvres">
     <div class="section-head reveal">
-      <div><div class="kicker">02 — Sélection</div><h2>Œuvres choisies<span style="color:#a9987e">.</span></h2></div>
+      <div><div class="kicker">CHAPITRE II — LES PIÈCES</div><h2>La peinture<br><em>à nu.</em></h2></div>
       <p>Une sélection de pièces originales. Chaque œuvre possède sa propre présence, son rythme et son histoire.</p>
     </div>
     <div class="exhibition-invite reveal">
- <div><div class="kicker">NOF / EXPÉRIENCE IMMERSIVE</div><h3>Entrez dans<br><em>la galerie.</em></h3><p>Parcourez une exposition virtuelle de peintures originales, choisissez un tableau et explorez ses détails.</p></div>
+ <div><div class="kicker">CHAPITRE III — ENTRER DANS L’ŒUVRE</div><h3>La matière<br><em>devient espace.</em></h3><p>Parcourez une exposition virtuelle de peintures originales, choisissez un tableau et explorez ses détails.</p></div>
  <button id="virtual-exhibition-action" type="button" disabled>Visiter l’exposition 3D <span aria-hidden="true">↗</span></button>
  </div>
  <div class="work-grid" id="nof-gallery"><p>Chargement de la collection…</p></div>
@@ -124,7 +188,7 @@ a:focus-visible,button:focus-visible{outline:2px solid #bda47b;outline-offset:4p
   <section class="about" id="apropos">
     <div class="portrait reveal"></div>
     <div class="about-copy reveal">
-      <div class="kicker">03 — L'artiste</div>
+      <div class="kicker">CHAPITRE IV — L’ARTISTE</div>
       <h2>Un regard.<br>Une matière.<br><em style="font-weight:500">Une signature.</em></h2>
       <p>Je développe un univers pictural guidé par l'expérimentation, la sensibilité et le goût du détail. À travers la peinture acrylique, je compose des espaces où les formes, les textures et les lumières invitent chacun à sa propre interprétation.</p>
       <p style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#9b907f">Artiste peintre · Œuvres originales</p>
@@ -132,7 +196,7 @@ a:focus-visible,button:focus-visible{outline:2px solid #bda47b;outline-offset:4p
   </section>
 
   <section class="contact" id="contact">
-    <div><div class="kicker">04 — Entrer en contact</div><h2>Une œuvre<br>vous appelle ?</h2></div>
+    <div><div class="kicker">CHAPITRE V — LA RENCONTRE</div><h2>Une œuvre<br>vous appelle ?</h2></div>
     <div class="contact-right"><p>Pour une acquisition, une collaboration ou simplement échanger autour de mon travail, je serai heureux de vous lire.</p><a class="contact-link" href="mailto:bonjour@atelier-artiste.fr">Écrire un message ↗</a></div>
   </section>
 </main>
@@ -150,6 +214,9 @@ document.querySelectorAll('.work-image').forEach(card=>{card.addEventListener('c
 document.getElementById('close').addEventListener('click',()=>lightbox.classList.remove('open'));
 lightbox.addEventListener('click',e=>{if(e.target===lightbox)lightbox.classList.remove('open')});
 
+const rawHero=document.querySelector('.hero');
+const rawTrack=document.querySelector('.raw-art-track');
+if(rawHero&&rawTrack&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){let ticking=false;const updateRaw=()=>{const bounds=rawHero.getBoundingClientRect();const progress=Math.max(0,Math.min(1,-bounds.top/Math.max(1,bounds.height)));rawTrack.style.setProperty('--raw-progress',progress.toFixed(3));ticking=false};window.addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(updateRaw)}},{passive:true});updateRaw()}
 </script>
 <script type="module" src="/gallery.js"></script>
 </body>
