@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#171715">
 <meta name="description" content="Portfolio d'artiste — peintures originales, matière, couleur et émotion.">
-<title>Atelier — Portfolio d'artiste</title>
+<title>NOF — Portfolio d'art contemporain</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
@@ -55,13 +55,7 @@ footer{padding:28px 5vw;background:#171715;color:#a9a398;display:flex;justify-co
       <div><div class="kicker">02 — Sélection</div><h2>Œuvres choisies<span style="color:#a9987e">.</span></h2></div>
       <p>Une sélection de pièces originales. Chaque œuvre possède sa propre présence, son rythme et son histoire.</p>
     </div>
-    <div class="work-grid">
-      <article class="work-card reveal"><div class="work-image" data-title="Les silences" tabindex="0" role="button" aria-label="Voir Les silences"><div class="art-placeholder"><span>ŒUVRE 01</span></div><img alt="Photographie de l'œuvre Les silences"></div><div class="work-meta"><div><h3>Les silences</h3><p>Acrylique sur toile · Série 01</p></div><span class="work-no">01 / 04</span></div></article>
-      <article class="work-card reveal"><div class="work-image" data-title="L'équilibre" tabindex="0" role="button" aria-label="Voir L'équilibre"><div class="art-placeholder"><span>ŒUVRE 02</span></div><img alt="Photographie de l'œuvre L'équilibre"></div><div class="work-meta"><div><h3>L'équilibre</h3><p>Acrylique sur toile · Série 01</p></div><span class="work-no">02 / 04</span></div></article>
-      <article class="work-card reveal"><div class="work-image" data-title="Fragments" tabindex="0" role="button" aria-label="Voir Fragments"><div class="art-placeholder"><span>ŒUVRE 03</span></div><img alt="Photographie de l'œuvre Fragments"></div><div class="work-meta"><div><h3>Fragments</h3><p>Acrylique sur toile · Série 02</p></div><span class="work-no">03 / 04</span></div></article>
-      <article class="work-card reveal"><div class="work-image" data-title="L'ailleurs" tabindex="0" role="button" aria-label="Voir L'ailleurs"><div class="art-placeholder"><span>ŒUVRE 04</span></div><img alt="Photographie de l'œuvre L'ailleurs"></div><div class="work-meta"><div><h3>L'ailleurs</h3><p>Acrylique sur toile · Série 02</p></div><span class="work-no">04 / 04</span></div></article>
-    </div>
-    <div class="upload-hint"><span>Personnalisez la galerie avec vos propres photographies d'œuvres.</span><label><input id="imageUpload" type="file" accept="image/*" multiple hidden><button type="button" onclick="document.getElementById('imageUpload').click()">Ajouter mes photos +</button></label></div>
+    <div class="work-grid" id="nof-gallery"><p>Chargement de la collection…</p></div>
   </section>
 
   <section class="statement">
@@ -84,7 +78,7 @@ footer{padding:28px 5vw;background:#171715;color:#a9a398;display:flex;justify-co
     <div class="contact-right"><p>Pour une acquisition, une collaboration ou simplement échanger autour de mon travail, je serai heureux de vous lire.</p><a class="contact-link" href="mailto:bonjour@atelier-artiste.fr">Écrire un message ↗</a></div>
   </section>
 </main>
-<footer><span>© 2026 — ATELIER / ARTISTE</span><span>Portfolio d'art contemporain</span><a href="#">Retour en haut ↑</a></footer>
+<footer><span>© 2026 — NOF</span><span>Portfolio d'art contemporain</span><a href="#">Retour en haut ↑</a></footer>
 <div class="lightbox" id="lightbox" aria-modal="true" role="dialog"><button class="close" id="close" aria-label="Fermer">×</button><img id="lightboxImg" alt=""></div>
 <script>
 const menu=document.getElementById('menu'),nav=document.getElementById('nav');
@@ -97,10 +91,8 @@ function openWork(card){const img=card.querySelector('img');if(img.src&&img.styl
 document.querySelectorAll('.work-image').forEach(card=>{card.addEventListener('click',()=>openWork(card));card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')openWork(card)})});
 document.getElementById('close').addEventListener('click',()=>lightbox.classList.remove('open'));
 lightbox.addEventListener('click',e=>{if(e.target===lightbox)lightbox.classList.remove('open')});
-document.getElementById('imageUpload').addEventListener('change',e=>{
- const files=[...e.target.files].slice(0,4);
- files.forEach((file,i)=>{const card=document.querySelectorAll('.work-card')[i];if(!card)return;const img=card.querySelector('img');img.src=URL.createObjectURL(file);img.style.display='block';card.querySelector('.art-placeholder').style.display='none';card.querySelector('h3').textContent=file.name.replace(/\.[^.]+$/,'').replace(/[-_]/g,' ')});
-});
+
 </script>
+<script type="module" src="/gallery.js"></script>
 </body>
 </html>
