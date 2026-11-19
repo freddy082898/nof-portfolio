@@ -216,6 +216,34 @@ footer{background:#241f1b}
 #oeuvres .kinetic-progress span{display:block;height:100%;width:20%;background:#e2bd8a;transition:width .6s ease}
 @media(max-width:760px){#oeuvres .kinetic-focus{height:clamp(570px,76svh,730px);min-height:570px;margin:25px 0 65px}#oeuvres .kinetic-top{font-size:8px;top:17px;left:5%;right:5%}#oeuvres .kinetic-top span:last-child{display:none}#oeuvres .kinetic-viewport{inset:50px 0 185px}#oeuvres .kinetic-card{width:clamp(170px,52vw,245px);height:clamp(235px,65vw,330px);margin-left:calc(clamp(170px,52vw,245px)/-2);margin-top:calc(clamp(235px,65vw,330px)/-2);border-width:5px}#oeuvres .kinetic-bottom{bottom:30px;grid-template-columns:42px minmax(0,1fr) 42px;gap:4px;left:3%;right:3%}#oeuvres .kinetic-arrow{width:40px;height:40px;font-size:20px}#oeuvres .kinetic-caption h3{font-size:26px}#oeuvres .kinetic-caption p{font-size:10px}#oeuvres .kinetic-eyebrow{font-size:8px;gap:8px}#oeuvres .kinetic-open{font-size:10px}}
 @media(prefers-reduced-motion:reduce){#oeuvres .kinetic-card,#oeuvres .kinetic-progress span{transition:none}}
+
+/* NOF FOCUS 3D ELEGANT — faithful reference composition, scoped to #oeuvres */
+#oeuvres .kinetic-focus{height:clamp(570px,61vw,750px);min-height:570px;max-width:1440px;margin:45px auto 90px;border:1px solid #292a2b;border-radius:0;background:radial-gradient(ellipse at 50% 65%,#202124 0%,#0c0d10 49%,#030406 100%);perspective:1250px;overflow:hidden}
+#oeuvres .kinetic-focus:before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 82%,#44444835,transparent 50%)}
+#oeuvres .kinetic-intro{position:absolute;z-index:11;top:7%;left:3.3%;width:190px;color:#fff;pointer-events:none}
+#oeuvres .kinetic-intro span{font:600 11px system-ui;color:#f7ca4b;letter-spacing:.03em}
+#oeuvres .kinetic-intro h3{font:400 clamp(24px,2.7vw,39px)/1.08 system-ui;margin:9px 0 16px;letter-spacing:-.04em}
+#oeuvres .kinetic-intro p{font:12px/1.6 system-ui;color:#c6c6c8;max-width:175px}
+#oeuvres .kinetic-viewport{position:absolute;inset:0 0 130px;z-index:4;overflow:visible;touch-action:pan-y}
+#oeuvres .kinetic-ring{top:54%;transform-style:preserve-3d}
+#oeuvres .kinetic-card{width:clamp(165px,24vw,335px);height:clamp(225px,34vw,445px);margin-left:calc(clamp(165px,24vw,335px)/-2);margin-top:calc(clamp(225px,34vw,445px)/-2);border:2px solid #6c655f;background:#181818;box-shadow:0 13px 38px #000b;filter:none;overflow:hidden;backface-visibility:visible}
+#oeuvres .kinetic-card.is-front{border:3px solid #f9be50;box-shadow:0 0 0 1px #ffe2a3,0 0 21px #f8a51b8c,0 20px 65px #000c}
+#oeuvres .kinetic-card img{width:100%;height:100%;padding:0;object-fit:contain;background:#111;filter:none}
+#oeuvres .kinetic-halo{position:absolute;z-index:5;pointer-events:none;left:50%;top:76%;width:clamp(210px,31vw,440px);height:clamp(26px,3.2vw,43px);transform:translateX(-50%) rotateX(63deg);border:4px solid #ffcf6b;border-radius:50%;box-shadow:0 0 10px #ffc444,0 0 24px #ff9e00,0 0 40px #ffac0060,inset 0 0 15px #ffc74b;opacity:.97}
+#oeuvres .kinetic-floor{position:absolute;z-index:0;pointer-events:none;left:10%;right:10%;bottom:0;height:43%;background:linear-gradient(0deg,#242529c7,#0c0d0e00),radial-gradient(ellipse at 50% 20%,#d4a74e25,transparent 50%);transform:perspective(600px) rotateX(40deg);transform-origin:bottom}
+#oeuvres .kinetic-bottom{position:absolute;z-index:12;bottom:19px;left:5%;right:5%;display:flex;align-items:center;justify-content:space-between;gap:8px}
+#oeuvres .kinetic-arrow{height:49px;width:49px;flex-shrink:0;border:1.5px solid #ffbf34;background:#050608a8;color:#fff;box-shadow:0 0 13px #ffb62b5c;border-radius:50%;font:32px/1 system-ui;display:grid;place-items:center;cursor:pointer}
+#oeuvres .kinetic-caption{min-width:0;text-align:center;flex:1;color:#fff}
+#oeuvres .kinetic-caption h3{font:500 clamp(16px,1.7vw,22px)/1.2 system-ui;margin:0 0 6px;letter-spacing:0}
+#oeuvres .kinetic-caption p{font:12px system-ui;color:#b8b8ba;margin:0 0 13px}
+#oeuvres .kinetic-dots{display:flex;justify-content:center;gap:11px;align-items:center}
+#oeuvres .kinetic-dots button{width:9px;height:9px;min-width:9px;border:0;border-radius:50%;background:#777779;cursor:pointer;padding:0}
+#oeuvres .kinetic-dots button[aria-current=true]{background:#ffca48;box-shadow:0 0 9px #ffbd31}
+#oeuvres .kinetic-open{display:block;margin:12px auto 0;font:600 10px system-ui;letter-spacing:.04em;color:#e9c17a;background:transparent;border:0;border-bottom:1px solid #b99c60;padding:3px;cursor:pointer}
+#oeuvres .kinetic-count{display:none}
+#oeuvres .kinetic-progress{display:none}
+@media(max-width:760px){#oeuvres .kinetic-focus{height:600px;min-height:600px;margin:25px auto 65px}#oeuvres .kinetic-intro{top:19px;left:17px;width:150px}#oeuvres .kinetic-intro span{font-size:9px}#oeuvres .kinetic-intro h3{font-size:23px;margin:4px 0 6px}#oeuvres .kinetic-intro p{font-size:10px;line-height:1.4}#oeuvres .kinetic-viewport{inset:0 0 154px}#oeuvres .kinetic-ring{top:58%}#oeuvres .kinetic-card{width:clamp(145px,51vw,235px);height:clamp(200px,68vw,320px);margin-left:calc(clamp(145px,51vw,235px)/-2);margin-top:calc(clamp(200px,68vw,320px)/-2);border-width:2px}#oeuvres .kinetic-halo{top:71%;width:clamp(170px,57vw,260px);height:24px;border-width:3px}#oeuvres .kinetic-bottom{bottom:15px;left:4%;right:4%}#oeuvres .kinetic-arrow{width:39px;height:39px;font-size:27px}#oeuvres .kinetic-caption h3{font-size:16px}#oeuvres .kinetic-caption p{font-size:10px}#oeuvres .kinetic-dots button{width:8px;height:8px;min-width:8px}#oeuvres .kinetic-open{margin-top:10px}}
+@media(prefers-reduced-motion:reduce){#oeuvres .kinetic-card{transition:none}}
 </style>
 </head>
 <body>
@@ -253,10 +281,10 @@ footer{background:#241f1b}
       <p>Une sélection de pièces originales. Chaque œuvre possède sa propre présence, son rythme et son histoire.</p>
     </div>
 <div class="kinetic-stage kinetic-focus" aria-label="Carrousel cinématographique des œuvres">
-<div class="kinetic-top"><span>NOF / COLLECTION PRIVÉE</span><span>UNE ŒUVRE. UN INSTANT.</span></div>
+<div class="kinetic-intro"><span>PROPOSITION 1 / NOF</span><h3>Focus 3D<br>Élégant</h3><p>Une œuvre mise en avant au centre, avec un carrousel courbe et un effet de profondeur.</p></div>
 <div class="kinetic-viewport" id="kinetic-viewport" tabindex="0" aria-label="Carrousel des œuvres, utilisez les flèches ou glissez pour naviguer"><div class="kinetic-ring" id="kinetic-ring"></div></div>
-<div class="kinetic-spotlight" aria-hidden="true"></div>
-<div class="kinetic-bottom"><button type="button" id="kinetic-prev" class="kinetic-arrow" aria-label="Œuvre précédente">←</button><div class="kinetic-caption"><span class="kinetic-eyebrow">ŒUVRE À L’HONNEUR <span id="kinetic-count">01 / 01</span></span><h3 id="kinetic-title">La collection NOF</h3><p id="kinetic-subtitle">Acrylique sur toile · Œuvre originale</p><button type="button" id="kinetic-open" class="kinetic-open">Découvrir en 3D ↗</button></div><button type="button" id="kinetic-next" class="kinetic-arrow" aria-label="Œuvre suivante">→</button></div>
+<div class="kinetic-halo" aria-hidden="true"></div><div class="kinetic-floor" aria-hidden="true"></div>
+<div class="kinetic-bottom"><button type="button" id="kinetic-prev" class="kinetic-arrow" aria-label="Œuvre précédente">‹</button><div class="kinetic-caption"><h3 id="kinetic-title">La collection NOF</h3><p id="kinetic-subtitle">Acrylique sur toile · Œuvre originale</p><div id="kinetic-dots" class="kinetic-dots" aria-label="Navigation entre les œuvres"></div><button type="button" id="kinetic-open" class="kinetic-open">Voir la toile en 3D ↗</button><span class="kinetic-count" id="kinetic-count">01 / 01</span></div><button type="button" id="kinetic-next" class="kinetic-arrow" aria-label="Œuvre suivante">›</button></div>
 <div class="kinetic-progress" aria-hidden="true"><span id="kinetic-progress-fill"></span></div>
 </div>
     <div class="exhibition-invite reveal">
