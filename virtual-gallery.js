@@ -12,15 +12,16 @@ export async function showVirtualGallery(artworks=[]){
  const close=document.createElement('button');close.textContent='Fermer ×';close.style.cssText='border:1px solid #a69f92;background:transparent;border-radius:22px;padding:10px 15px;color:inherit;cursor:pointer';
  header.append(heading,close);
  const stage=document.createElement('div');stage.style.cssText='position:relative;flex:1;min-height:0;touch-action:pan-y;background:#e9e5dc';
- const hint=document.createElement('div');hint.style.cssText='position:absolute;top:15px;left:15px;right:15px;pointer-events:none;text-align:center;font-size:12px;color:#49453e;text-shadow:0 1px 4px #fff';hint.textContent='Glisser pour regarder · Toucher un tableau pour le découvrir';stage.append(hint);
+ const hint=document.createElement('div');hint.style.cssText='position:absolute;top:15px;left:15px;right:15px;pointer-events:none;text-align:center;font-size:12px;color:#49453e;text-shadow:0 1px 4px #fff';hint.textContent='Glisser pour regarder · Avancer ou reculer avec les commandes · Toucher une œuvre';stage.append(hint);
  const info=document.createElement('div');info.style.cssText='background:#f8f6f1;padding:12px 16px;text-align:center;font-size:13px;min-height:42px';info.setAttribute('aria-live','polite');info.textContent='Une sélection d’œuvres originales';
  const controls=document.createElement('div');controls.style.cssText='display:flex;align-items:center;justify-content:center;gap:9px;padding:12px 10px 16px;background:#f8f6f1';
  const button=(label)=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.style.cssText='background:#272520;color:#fff;border:0;border-radius:22px;padding:12px 16px;cursor:pointer;font:13px system-ui';controls.append(b);return b};
- const prev=button('← Précédent'),home=button('Vue générale'),next=button('Suivant →');
+ const prev=button('← Œuvre'),back=button('− Reculer'),home=button('Vue générale'),forward=button('+ Avancer'),next=button('Œuvre →');
+ controls.style.flexWrap='wrap';
  modal.append(header,stage,info,controls);document.body.append(modal);
  const oldOverflow=document.body.style.overflow;document.body.style.overflow='hidden';
  let renderer,scene,camera,raf=0,disposed=false,resizeObserver;const resources=[],textures=[],artMeshes=[];
- let selected=0,targetYaw=0,yaw=0,dragging=false,dragStartX=0,dragStartY=0,dragMoved=false,previousX=0;
+ let selected=0,targetYaw=0,yaw=0,targetX=0,targetZ=0,dragging=false,dragStartX=0,dragStartY=0,dragMoved=false,previousX=0;
  const key=e=>{if(e.key==='Escape')destroy();if(e.key==='ArrowRight')focus(selected+1);if(e.key==='ArrowLeft')focus(selected-1)};
  function destroy(){if(disposed)return;disposed=true;cancelAnimationFrame(raf);resizeObserver?.disconnect();window.removeEventListener('keydown',key);resources.forEach(r=>r.dispose());textures.forEach(t=>t.dispose());renderer?.dispose();document.body.style.overflow=oldOverflow;modal.remove()}
  close.onclick=destroy;window.addEventListener('keydown',key);
@@ -46,6 +47,7 @@ export async function showVirtualGallery(artworks=[]){
   if(side===3)slots.push({x:-8.76,z:-offset,ry:Math.PI/2});
  }
  const planeGeo=new THREE.PlaneGeometry(1,1);resources.push(planeGeo);
+ function labelTexture(work,i){const c=document.createElement('canvas');c.width=768;c.height=192;const ctx=c.getContext('2d');ctx.fillStyle='#faf8f2';ctx.fillRect(0,0,768,192);ctx.fillStyle='#302d27';ctx.font='600 33px Georgia,serif';ctx.fillText((i+1).toString().padStart(2,'0')+'  '+String(work.title).slice(0,29),26,68);ctx.font='25px Arial,sans-serif';ctx.fillStyle='#777067';ctx.fillText([work.technique,work.width_cm&&work.height_cm?work.width_cm+' × '+work.height_cm+' cm':null,work.year_created].filter(Boolean).join(' · ').slice(0,55),26,128);const tex=new THREE.CanvasTexture(c);tex.colorSpace=THREE.SRGBColorSpace;textures.push(tex);return tex}
  await Promise.all(works.map(async(work,i)=>{
   try{
    const texture=await loader.loadAsync(work.imageUrl);if(disposed){texture.dispose();return}
@@ -57,22 +59,24 @@ export async function showVirtualGallery(artworks=[]){
    const border=new THREE.Mesh(new THREE.BoxGeometry(w+.035,h+.035,.012),matte);resources.push(border.geometry);border.position.z=.052;group.add(border);
    const pictureMat=new THREE.MeshBasicMaterial({map:texture,side:THREE.FrontSide});resources.push(pictureMat);
    const picture=new THREE.Mesh(planeGeo,pictureMat);picture.scale.set(w,h,1);picture.position.z=.063;picture.userData.index=i;group.add(picture);artMeshes.push(picture);
+   const captionMaterial=new THREE.MeshBasicMaterial({map:labelTexture(work,i),side:THREE.DoubleSide});resources.push(captionMaterial);const caption=new THREE.Mesh(planeGeo,captionMaterial);caption.scale.set(Math.min(2.25,w),.48,1);caption.position.set(0,-h/2-.39,.075);group.add(caption);
   }catch(err){console.warn('Photographie non chargée dans la galerie virtuelle',work.title,err)}
  }));
  if(disposed)return;
  if(!artMeshes.length){info.textContent='Impossible de charger les photographies. Ferme puis réessaie.'}
  const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();
- function focus(i){selected=(i+works.length)%works.length;const slot=slots[selected];const dir=new THREE.Vector3(slot.x,1.85,slot.z).sub(camera.position);targetYaw=Math.atan2(-dir.x,-dir.z);info.textContent=(selected+1)+' / '+works.length+' · '+works[selected].title+' · '+(works[selected].technique||'Œuvre originale')}
- function overview(){targetYaw=0;info.textContent='Vue générale · Glisser pour regarder autour de soi'}
+ function focus(i){selected=(i+works.length)%works.length;const slot=slots[selected];const dir=new THREE.Vector3(slot.x,1.85,slot.z).sub(new THREE.Vector3(targetX,1.65,targetZ));targetYaw=Math.atan2(-dir.x,-dir.z);const w=works[selected];info.textContent=(selected+1)+' / '+works.length+' · '+w.title+' · '+(w.technique||'Œuvre originale')+[w.width_cm&&w.height_cm?w.width_cm+' × '+w.height_cm+' cm':null,w.year_created].filter(Boolean).map(x=>' · '+x).join('')}
+ function overview(){targetX=0;targetZ=0;targetYaw=0;info.textContent='Vue générale · Glisser pour regarder autour de soi'}
+ function move(distance){const dx=-Math.sin(targetYaw)*distance,dz=-Math.cos(targetYaw)*distance;targetX=Math.max(-7.4,Math.min(7.4,targetX+dx));targetZ=Math.max(-7.4,Math.min(7.4,targetZ+dz));info.textContent='Déplacement dans la salle · '+Math.round(Math.hypot(targetX,targetZ)*10)/10+' m du centre'}
  function pick(clientX,clientY){const rect=renderer.domElement.getBoundingClientRect();pointer.x=(clientX-rect.left)/rect.width*2-1;pointer.y=-(clientY-rect.top)/rect.height*2+1;raycaster.setFromCamera(pointer,camera);const hit=raycaster.intersectObjects(artMeshes,false)[0];if(hit){focus(hit.object.userData.index);return true}return false}
  let lastTap=0;
  renderer.domElement.addEventListener('pointerdown',e=>{dragging=true;dragMoved=false;dragStartX=e.clientX;dragStartY=e.clientY;previousX=e.clientX;renderer.domElement.setPointerCapture(e.pointerId)});
  renderer.domElement.addEventListener('pointermove',e=>{if(!dragging)return;if(Math.hypot(e.clientX-dragStartX,e.clientY-dragStartY)>7)dragMoved=true;targetYaw-=(e.clientX-previousX)*.006;previousX=e.clientX});
  renderer.domElement.addEventListener('pointerup',e=>{if(!dragMoved){const tapped=pick(e.clientX,e.clientY);const now=performance.now();if(tapped&&now-lastTap<400){const work=works[selected];import('./zoom-viewer.js').then(m=>m.showArtworkZoom({title:work.title,imageUrl:work.imageUrl})).catch(console.error)}lastTap=now}dragging=false});
  renderer.domElement.addEventListener('pointercancel',()=>{dragging=false});
- prev.onclick=()=>focus(selected-1);next.onclick=()=>focus(selected+1);home.onclick=overview;
+ prev.onclick=()=>focus(selected-1);next.onclick=()=>focus(selected+1);home.onclick=overview;forward.onclick=()=>move(1.3);back.onclick=()=>move(-1.3);
  function resize(){const w=stage.clientWidth,h=stage.clientHeight;if(!w||!h)return;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h,false)}
  resizeObserver=new ResizeObserver(resize);resizeObserver.observe(stage);resize();focus(0);
- function animate(){if(disposed)return;raf=requestAnimationFrame(animate);let delta=(targetYaw-yaw+Math.PI)%(Math.PI*2);if(delta<0)delta+=Math.PI*2;delta-=Math.PI;yaw+=delta*.11;camera.rotation.set(0,yaw,0);renderer.render(scene,camera)}animate();
+ function animate(){if(disposed)return;raf=requestAnimationFrame(animate);let delta=(targetYaw-yaw+Math.PI)%(Math.PI*2);if(delta<0)delta+=Math.PI*2;delta-=Math.PI;yaw+=delta*.11;camera.rotation.set(0,yaw,0);camera.position.x+=(targetX-camera.position.x)*.12;camera.position.z+=(targetZ-camera.position.z)*.12;renderer.render(scene,camera)}animate();
  }catch(err){console.error('NOF exposition 3D',err);info.textContent='La galerie 3D est indisponible sur cet appareil.';close.textContent='Fermer'}
 }
