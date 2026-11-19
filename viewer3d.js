@@ -31,7 +31,7 @@ export async function showArtwork3D({title,width_cm,height_cm,front,views=[]}){
   const frontTex=await load(front||views[0]);if(disposed)return;
   // Do not stretch an oblique photo onto a flat side: it introduces perspective twice.
   // A back photograph is only used when explicitly supplied in the standard slot.
-  const backTex=await load(views[3]);if(disposed)return;
+  const backTex=null; // Rear photo is not mapped until the admin explicitly labels/calibrates it.
   const measured=Number(width_cm)>0&&Number(height_cm)>0;
   const imageAspect=frontTex?.image?.width&&frontTex?.image?.height?frontTex.image.width/frontTex.image.height:1;
   const aspect=measured?Number(width_cm)/Number(height_cm):imageAspect;
