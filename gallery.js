@@ -14,9 +14,9 @@ if(art.image_path){const {data:signed}=await sb.storage.from('artworks-images').
 if(!img.src){const placeholder=document.createElement('div');placeholder.className='art-placeholder';placeholder.textContent='NOF';frame.append(placeholder)}else frame.append(img);
 const {data:views,error:viewsError}=await sb.from('artwork_views').select('angle_index,image_path').eq('artwork_id',art.id).order('angle_index');
 if(viewsError)console.warn('Vues indisponibles',viewsError);
-const urls=[];for(const view of views||[]){const result=await sb.storage.from('artworks-images').createSignedUrl(view.image_path,3600);if(result.data?.signedUrl)urls.push(result.data.signedUrl)}
-if(!urls.length&&img.src)urls.push(img.src);
-async function openViewer(){if(!urls.length)return;try{const {showArtwork3D}=await import('./viewer3d.js');await showArtwork3D({title:art.title,width_cm:art.width_cm,height_cm:art.height_cm,front:img.src||urls[0],views:urls})}catch(e){console.error(e);alert('Impossible de lancer la visualisation 3D sur cet appareil.')}}
+const urls=[];for(const view of views||[]){const result=await sb.storage.from('artworks-images').createSignedUrl(view.image_path,3600);if(result.data?.signedUrl)urls[view.angle_index]=result.data.signedUrl}
+if(!urls.some(Boolean)&&img.src)urls[0]=img.src;
+async function openViewer(){if(!urls.some(Boolean))return;try{const {showArtwork3D}=await import('./viewer3d.js');await showArtwork3D({title:art.title,width_cm:art.width_cm,height_cm:art.height_cm,front:img.src||urls[0],views:urls})}catch(e){console.error(e);alert('Impossible de lancer la visualisation 3D sur cet appareil.')}}
 frame.addEventListener('click',openViewer);
 frame.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openViewer()}});
 const meta=document.createElement('div');meta.className='work-meta';const inner=document.createElement('div');const title=document.createElement('h3');title.textContent=art.title;const details=document.createElement('p');details.textContent=[art.technique,art.width_cm&&art.height_cm?art.width_cm+' × '+art.height_cm+' cm':null,art.year_created,art.status==='sold'?'Vendu':art.status==='reserved'?'Réservé':null].filter(Boolean).join(' · ');inner.append(title,details);meta.append(inner);article.append(frame,meta);gallery.append(article)
