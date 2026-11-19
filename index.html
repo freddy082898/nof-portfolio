@@ -166,6 +166,19 @@ footer{background:#241f1b}
 @media(max-width:760px){.hero{padding:105px 6vw 75px;align-items:flex-end}.kinetic-stage{inset:70px 0 0}.kinetic-ring{top:35%}.kinetic-card{width:clamp(145px,47vw,220px);height:clamp(190px,59vw,290px);margin-left:calc(clamp(145px,47vw,220px) / -2);margin-top:calc(clamp(190px,59vw,290px) / -2);border-width:5px}.kinetic-ui{top:9px;left:6vw;right:6vw}.kinetic-tag{font-size:7px}.kinetic-hint{display:none}.kinetic-controls{gap:8px}.kinetic-controls button{width:35px;height:35px}.hero h1{font-size:clamp(47px,10vw,74px);margin:8px 0 20px}.hero h1 em{padding-left:0;font-size:.62em}.hero-bottom{gap:9px}.hero-bottom p{max-width:270px;font-size:11px}.raw-art-label{display:none}.raw-hero-counter{font-size:7px}}
 @media(prefers-reduced-motion:reduce){.kinetic-ring{will-change:auto}.kinetic-card{transition:none}}
 
+
+/* Kinetic carousel belongs to the collection, never the opening hero */
+.hero{min-height:100svh;padding:150px 5vw 90px;align-items:center}
+.raw-art-track{display:block}
+.hero h1{font-size:clamp(78px,13vw,205px);line-height:.78;max-width:none;margin:30px 0 50px}
+.hero h1 em{font-size:.69em;padding-left:12vw}
+.hero-bottom{max-width:none;padding-top:25px}
+.hero-bottom p{max-width:360px;font-size:14px}
+#oeuvres .kinetic-stage{position:relative;inset:auto;width:100%;height:min(76vh,710px);min-height:470px;margin:32px 0 90px;background:radial-gradient(ellipse at center,#655b4d,#29251f 65%,#181612);border:1px solid #9a877047;overflow:hidden;isolation:isolate}
+#oeuvres .kinetic-ring{top:50%}
+#oeuvres .kinetic-ui{top:22px}
+#oeuvres .kinetic-card{border-color:#e6dfd3}
+@media(max-width:760px){.hero{padding:115px 6vw 80px;align-items:center}.hero h1{font-size:clamp(64px,15.1vw,108px);line-height:.88;margin:30px 0 35px}.hero h1 em{padding-left:4vw}.hero-bottom{gap:18px}.hero-bottom p{font-size:12px;max-width:300px}#oeuvres .kinetic-stage{height:540px;min-height:0;margin:20px 0 65px}#oeuvres .kinetic-ring{top:49%}#oeuvres .kinetic-ui{top:15px}}
 </style>
 </head>
 <body>
@@ -177,11 +190,11 @@ footer{background:#241f1b}
 <main>
   <section class="hero">
     <div class="raw-art-space" aria-hidden="true"><div class="raw-art-track"><div class="hero-art"></div></div><div class="raw-art-grain"></div><div class="raw-art-label">ÉTUDE DE MATIÈRE / NOF — 001</div></div>
-    <div class="kinetic-stage" aria-label="Galerie cinétique interactive"><div class="kinetic-viewport" id="kinetic-viewport" tabindex="0" aria-label="Faire tourner les œuvres avec les flèches ou en glissant"><div class="kinetic-ring" id="kinetic-ring"></div></div><div class="kinetic-ui"><span class="kinetic-tag">NOF / KINETIC COLLECTION</span><div class="kinetic-controls"><button type="button" id="kinetic-prev" aria-label="Œuvre précédente">←</button><span id="kinetic-count">01 / 01</span><button type="button" id="kinetic-next" aria-label="Œuvre suivante">→</button></div><span class="kinetic-hint">GLISSER POUR EXPLORER ↔</span></div></div><div class="hero-copy">
-      <div class="eyebrow">NOF / 001 — EXPÉRIENCE CINÉTIQUE</div>
-      <h1>LA MATIÈRE<br><em>EN MOUVEMENT</em><span class="raw-stop">.</span></h1>
+    <div class="hero-copy">
+      <div class="eyebrow">NOF / 001 — UN MANIFESTE DE MATIÈRE</div>
+      <h1>REGARDER<br><em>DE PLUS</em><br>PRÈS<span class="raw-stop">.</span></h1>
       <div class="hero-bottom">
-        <p>Faites tourner la collection. Approchez-vous. Chaque toile ouvre une nouvelle perspective.</p>
+        <p>Une peinture ne se regarde pas seulement. Elle se découvre couche après couche, trace après trace.</p>
         <a class="cta" href="#oeuvres">Dévoiler les œuvres <span>↓</span></a>
       </div>
     </div>
