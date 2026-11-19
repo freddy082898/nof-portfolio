@@ -6,7 +6,7 @@ const prev=document.getElementById('kinetic-prev');
 const next=document.getElementById('kinetic-next');
 const gallery=document.getElementById('nof-gallery');
 if(viewport&&ring&&gallery){
-  let works=[],active=0,current=0,target=0,dragStart=null,lastX=0,moved=false,raf=0,paused=false,lastSwipeAt=0;
+  let works=[],active=0,current=0,target=0,dragStart=null,lastX=0,moved=false,raf=0,paused=false,lastSwipeAt=0,mode='circle',mix=1,modeRaf=0;
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const fallback=[{title:'NOF / La matière',src:''},{title:'NOF / Le geste',src:''},{title:'NOF / La lumière',src:''},{title:'NOF / Le regard',src:''},{title:'NOF / La trace',src:''}];
   function collect(){
@@ -29,22 +29,38 @@ if(viewport&&ring&&gallery){
     update();
   }
   function update(){
-    const n=works.length||1;
-    const r=radius();
+    const n=works.length||1,r=radius(),width=viewport.clientWidth||innerWidth,mobile=width<760;
     [...ring.children].forEach((card,i)=>{
-      const angle=n===1?current*Math.PI/2:(i-current)*Math.PI*2/n;
-      const x=n===1?0:Math.sin(angle)*r,z=n===1?0:Math.cos(angle)*r-r;
-      card.style.transform='translate3d('+x.toFixed(1)+'px,0,'+z.toFixed(1)+'px) rotateY('+(n===1?(-current*45):(-Math.sin(angle)*22)).toFixed(1)+'deg)';
-      const distance=Math.abs(((i-current+n*10+n/2)%n)-n/2);
-      card.style.opacity=String(Math.max(.3,1-distance*.19));
+      let d=i-current;if(n>1){d=((d+n*50+n/2)%n)-n/2}
+      const angle=n===1?0:d*Math.PI*2/n;
+      const circle={x:Math.sin(angle)*r,y:0,z:Math.cos(angle)*r-r,ry:-Math.sin(angle)*24,rz:0};
+      const fan={x:d*(mobile?94:170),y:Math.abs(d)*(mobile?15:24),z:-Math.abs(d)*65,ry:d*-12,rz:d*-(mobile?9:12)};
+      const tunnel={x:Math.sin(angle)*r*.62,y:Math.cos(angle)*r*.38,z:-Math.abs(d)*(mobile?135:210),ry:-Math.sin(angle)*25,rz:0};
+      const galleryLayout={x:d*(mobile?160:290),y:0,z:-Math.abs(d)*95,ry:d*-8,rz:0};
+      const targetLayout={circle,fan,tunnel,gallery:galleryLayout}[mode]||circle;
+      const blend=(k)=>circle[k]*(1-mix)+targetLayout[k]*mix;
+      const x=blend('x'),y=blend('y'),z=blend('z'),ry=blend('ry'),rz=blend('rz');
+      card.style.transform='translate3d('+x.toFixed(1)+'px,'+y.toFixed(1)+'px,'+z.toFixed(1)+'px) rotateY('+ry.toFixed(1)+'deg) rotateZ('+rz.toFixed(1)+'deg)';
+      card.style.opacity=String(Math.max(.38,1-Math.abs(d)*.16));
       card.classList.toggle('is-front',i===active);
-      card.style.zIndex=String(Math.max(1,Math.round(1000+z)));
+      card.style.zIndex=String(Math.round(10000+z));
     });
     count.textContent=String(active+1).padStart(2,'0')+' / '+String(n).padStart(2,'0');
   }
+  function setMode(next){
+    if(!['circle','fan','tunnel','gallery'].includes(next)||mode===next)return;
+    mode=next;
+    document.querySelectorAll('[data-kinetic-mode]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.kineticMode===mode)));
+    cancelAnimationFrame(modeRaf);
+    if(reduced){mix=1;update();return}
+    const start=performance.now(),duration=850;
+    const animateMode=now=>{const t=Math.min(1,(now-start)/duration);mix=t*t*(3-2*t);update();if(t<1)modeRaf=requestAnimationFrame(animateMode)};
+    mix=0;modeRaf=requestAnimationFrame(animateMode);
+  }
+  document.querySelectorAll('[data-kinetic-mode]').forEach(button=>button.addEventListener('click',()=>setMode(button.dataset.kineticMode)));
   function tick(){const delta=target-current;current=reduced?target:current+delta*.105;update();if(Math.abs(target-current)>.001){raf=requestAnimationFrame(tick)}else{current=target;update();raf=0}}
   function animate(){if(!raf)raf=requestAnimationFrame(tick)}
-  function go(i){const n=works.length||1;if(n===1){active=0;target+=(i>0?1:-1);animate();return}const normalized=((i%n)+n)%n;let diff=normalized-active;if(diff>n/2)diff-=n;if(diff< -n/2)diff+=n;active=normalized;target+=diff;animate()}
+  function go(i){const n=works.length||1;if(n===1){active=0;return}const normalized=((i%n)+n)%n;let diff=normalized-active;if(diff>n/2)diff-=n;if(diff< -n/2)diff+=n;active=normalized;target+=diff;animate()}
   prev.addEventListener('click',()=>go(active-1));next.addEventListener('click',()=>go(active+1));
   viewport.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();go(active+(e.key==='ArrowRight'?1:-1))}});
   viewport.addEventListener('pointerdown',e=>{if(e.button!==0)return;dragStart=e.clientX;lastX=e.clientX;moved=false;try{viewport.setPointerCapture(e.pointerId)}catch{}});
@@ -59,6 +75,6 @@ if(viewport&&ring&&gallery){
   const observer=new MutationObserver(()=>{if(gallery.querySelector('.work-card'))collect()});
   observer.observe(gallery,{childList:true,subtree:true});
   works=fallback;render();collect();
-  if(!reduced){let last=performance.now();const auto=now=>{if(document.visibilityState==='visible'&&!paused&&now-last>5500&&dragStart===null){go(active+1);last=now}requestAnimationFrame(auto)};requestAnimationFrame(auto)}
+  // No unsolicited rotation: let visitors inspect artwork without losing their place.
   const visibility=new IntersectionObserver(entries=>{paused=!entries[0]?.isIntersecting},{threshold:.05});visibility.observe(viewport);
 }
