@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#e7e1d6">
 <meta name="description" content="Portfolio d'artiste — peintures originales, matière, couleur et émotion.">
-<title>NOF — RAW MATTER / Matière vivante</title>
+<title>NOF — KINETIC MATTER / Galerie interactive</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
@@ -137,6 +137,35 @@ footer{background:#241f1b}
 @media(max-width:380px){.hero h1{font-size:61px}.hero-bottom{gap:10px}.raw-hero-counter{letter-spacing:.07em}}
 @media(prefers-reduced-motion:reduce){.raw-art-track{transition:none;transform:scale(1.2)}.reveal,.work-image,.cta{transition:none}}
 
+
+/* KINETIC MATTER — interactive 3D carousel from first paint */
+.hero{min-height:100svh;padding-top:105px;padding-bottom:65px;display:flex;align-items:flex-end;overflow:hidden;background:#171612}
+.raw-art-space{background:radial-gradient(ellipse at 52% 47%,#534d43,#211e19 62%,#141311)}
+.raw-art-track{display:none}.raw-art-space:after{background:linear-gradient(0deg,#141311ee 0%,#14131100 47%,#14131166 100%)}
+.hero-copy{position:relative;z-index:6;pointer-events:none}
+.hero h1{font-size:clamp(57px,7.6vw,122px);line-height:.91;max-width:850px;margin:10px 0 22px}
+.hero h1 em{font-size:.65em;padding-left:8vw}
+.hero-bottom{border-top:1px solid #e8dcc55a;max-width:650px;pointer-events:auto;padding-top:17px}
+.hero-bottom p{max-width:290px;font-size:12px}.cta{min-height:48px;padding:13px 18px}
+.eyebrow{font-size:9px}
+.kinetic-stage{position:absolute;inset:55px 0 0;z-index:2;perspective:1200px;overflow:hidden;touch-action:pan-y;user-select:none}
+.kinetic-viewport{position:absolute;inset:0;outline-offset:-8px;cursor:grab;touch-action:pan-y}
+.kinetic-viewport:active{cursor:grabbing}
+.kinetic-ring{position:absolute;left:50%;top:39%;width:0;height:0;transform-style:preserve-3d;transform:rotateX(-7deg);will-change:transform}
+.kinetic-card{position:absolute;left:0;top:0;width:clamp(155px,22vw,325px);height:clamp(205px,31vw,435px);margin-left:calc(clamp(155px,22vw,325px) / -2);margin-top:calc(clamp(205px,31vw,435px) / -2);border:7px solid #e6dfd3;background:#ded5c6;box-shadow:0 24px 80px #000b,0 0 0 1px #d4bfa4;backface-visibility:visible;transform-style:preserve-3d;overflow:hidden;cursor:pointer;transition:filter .5s,opacity .5s;filter:brightness(.78)}
+.kinetic-card.is-front{filter:brightness(1)}
+.kinetic-card img{width:100%;height:100%;object-fit:contain;background:#eee8dc;display:block}
+.kinetic-card .kinetic-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#5b4b3d;font:800 45px var(--sans);letter-spacing:-.1em;background:linear-gradient(140deg,#e7d9c6,#b6a08a)}
+.kinetic-card-title{position:absolute;bottom:0;left:0;right:0;padding:9px 10px;background:#181512ce;color:#fff;font:10px var(--sans);letter-spacing:.08em;text-overflow:ellipsis;overflow:hidden;white-space:nowrap}
+.kinetic-ui{position:absolute;z-index:8;left:5vw;right:5vw;top:20px;display:flex;align-items:center;justify-content:space-between;pointer-events:none;color:#efe5d7;font:9px var(--sans);letter-spacing:.16em}
+.kinetic-controls{display:flex;align-items:center;gap:14px;pointer-events:auto}
+.kinetic-controls button{background:#e8dccb1c;border:1px solid #f4e8d285;border-radius:50%;width:40px;height:40px;color:#fff;font-size:21px;cursor:pointer;backdrop-filter:blur(12px)}
+.kinetic-controls button:hover{background:#e8dccb44}
+.kinetic-hint{color:#e5d6c0a8}
+.raw-hero-counter{z-index:7}
+@media(max-width:760px){.hero{padding:105px 6vw 75px;align-items:flex-end}.kinetic-stage{inset:70px 0 0}.kinetic-ring{top:35%}.kinetic-card{width:clamp(145px,47vw,220px);height:clamp(190px,59vw,290px);margin-left:calc(clamp(145px,47vw,220px) / -2);margin-top:calc(clamp(190px,59vw,290px) / -2);border-width:5px}.kinetic-ui{top:9px;left:6vw;right:6vw}.kinetic-tag{font-size:7px}.kinetic-hint{display:none}.kinetic-controls{gap:8px}.kinetic-controls button{width:35px;height:35px}.hero h1{font-size:clamp(47px,10vw,74px);margin:8px 0 20px}.hero h1 em{padding-left:0;font-size:.62em}.hero-bottom{gap:9px}.hero-bottom p{max-width:270px;font-size:11px}.raw-art-label{display:none}.raw-hero-counter{font-size:7px}}
+@media(prefers-reduced-motion:reduce){.kinetic-ring{will-change:auto}.kinetic-card{transition:none}}
+
 </style>
 </head>
 <body>
@@ -148,11 +177,11 @@ footer{background:#241f1b}
 <main>
   <section class="hero">
     <div class="raw-art-space" aria-hidden="true"><div class="raw-art-track"><div class="hero-art"></div></div><div class="raw-art-grain"></div><div class="raw-art-label">ÉTUDE DE MATIÈRE / NOF — 001</div></div>
-    <div class="hero-copy">
-      <div class="eyebrow">NOF / 001 — UN MANIFESTE DE MATIÈRE</div>
-      <h1>REGARDER<br><em>DE PLUS</em><br>PRÈS<span class="raw-stop">.</span></h1>
+    <div class="kinetic-stage" aria-label="Galerie cinétique interactive"><div class="kinetic-viewport" id="kinetic-viewport" tabindex="0" aria-label="Faire tourner les œuvres avec les flèches ou en glissant"><div class="kinetic-ring" id="kinetic-ring"></div></div><div class="kinetic-ui"><span class="kinetic-tag">NOF / KINETIC COLLECTION</span><div class="kinetic-controls"><button type="button" id="kinetic-prev" aria-label="Œuvre précédente">←</button><span id="kinetic-count">01 / 01</span><button type="button" id="kinetic-next" aria-label="Œuvre suivante">→</button></div><span class="kinetic-hint">GLISSER POUR EXPLORER ↔</span></div></div><div class="hero-copy">
+      <div class="eyebrow">NOF / 001 — EXPÉRIENCE CINÉTIQUE</div>
+      <h1>LA MATIÈRE<br><em>EN MOUVEMENT</em><span class="raw-stop">.</span></h1>
       <div class="hero-bottom">
-        <p>Une peinture ne se regarde pas seulement. Elle se découvre couche après couche, trace après trace.</p>
+        <p>Faites tourner la collection. Approchez-vous. Chaque toile ouvre une nouvelle perspective.</p>
         <a class="cta" href="#oeuvres">Dévoiler les œuvres <span>↓</span></a>
       </div>
     </div>
@@ -219,5 +248,6 @@ const rawTrack=document.querySelector('.raw-art-track');
 if(rawHero&&rawTrack&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){let ticking=false;const updateRaw=()=>{const bounds=rawHero.getBoundingClientRect();const progress=Math.max(0,Math.min(1,-bounds.top/Math.max(1,bounds.height)));rawTrack.style.setProperty('--raw-progress',progress.toFixed(3));ticking=false};window.addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(updateRaw)}},{passive:true});updateRaw()}
 </script>
 <script type="module" src="/gallery.js"></script>
+<script type="module" src="/kinetic-gallery.js"></script>
 </body>
 </html>
