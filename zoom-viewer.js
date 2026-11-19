@@ -8,8 +8,8 @@ export function showArtworkZoom({title,imageUrl}){
  const heading=document.createElement('strong');heading.textContent=title+' · Détails';
  const close=document.createElement('button');close.textContent='Fermer ×';close.style.cssText='background:transparent;color:inherit;border:1px solid #999;border-radius:24px;padding:10px 15px;cursor:pointer';
  header.append(heading,close);
- const stage=document.createElement('div');stage.style.cssText='position:relative;flex:1;min-height:0;overflow:hidden;touch-action:none;cursor:grab;display:grid;place-items:center';
- const img=document.createElement('img');img.alt='Détails de '+title;img.src=imageUrl;img.draggable=false;img.style.cssText='position:absolute;display:block;max-width:none;max-height:none;user-select:none;-webkit-user-select:none;transform-origin:0 0;pointer-events:none';
+ const stage=document.createElement('div');stage.style.cssText='position:relative;flex:1;min-height:0;overflow:hidden;touch-action:none;cursor:grab;display:block';
+ const img=document.createElement('img');img.alt='Détails de '+title;img.draggable=false;img.style.cssText='position:absolute;left:0;top:0;display:block;max-width:none;max-height:none;user-select:none;-webkit-user-select:none;transform-origin:0 0;pointer-events:none';
  stage.append(img);
  const controls=document.createElement('div');controls.style.cssText='display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;padding:12px 12px 8px';
  const button=(label)=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.style.cssText='padding:10px 16px;border:1px solid #777;background:#272724;color:#fff;border-radius:24px;cursor:pointer';controls.append(b);return b};
@@ -25,9 +25,11 @@ export function showArtworkZoom({title,imageUrl}){
  }
  function draw(){if(disposed||!naturalW)return;clamp();img.style.width=naturalW+'px';img.style.height=naturalH+'px';img.style.transform='translate('+x+'px,'+y+'px) scale('+scale+')';status.textContent=Math.round(scale/fit*100)+' %'}
  function fitImage(){if(!naturalW||!stage.clientWidth||!stage.clientHeight)return;fit=Math.min(stage.clientWidth/naturalW,stage.clientHeight/naturalH);scale=fit;x=(stage.clientWidth-naturalW*scale)/2;y=(stage.clientHeight-naturalH*scale)/2;draw()}
- function zoom(factor,cx=stage.clientWidth/2,cy=stage.clientHeight/2){if(!naturalW)return;const next=Math.max(fit,Math.min(Math.max(fit*8,Math.min(1,naturalW>0?1:fit)),scale*factor));const ratio=next/scale;x=cx-(cx-x)*ratio;y=cy-(cy-y)*ratio;scale=next;draw()}
+ function zoom(factor,cx=stage.clientWidth/2,cy=stage.clientHeight/2){if(!naturalW)return;const next=Math.max(fit,Math.min(Math.max(fit*8,1),scale*factor));const ratio=next/scale;x=cx-(cx-x)*ratio;y=cy-(cy-y)*ratio;scale=next;draw()}
  img.onload=()=>{naturalW=img.naturalWidth;naturalH=img.naturalHeight;fitImage();note.textContent+=' · Photo source : '+naturalW+' × '+naturalH+' px'};
  img.onerror=()=>{note.textContent='Impossible de charger la photographie originale. Ferme puis réessaie.'};
+ img.src=imageUrl;
+ if(img.complete&&img.naturalWidth)img.onload();
  const ro=new ResizeObserver(()=>{if(!naturalW)return;const oldFit=fit;fit=Math.min(stage.clientWidth/naturalW,stage.clientHeight/naturalH);if(scale<=oldFit*1.01)fitImage();else draw()});ro.observe(stage);
  const key=e=>{if(e.key==='Escape')destroy();if(e.key==='+'||e.key==='=')zoom(1.3);if(e.key==='-')zoom(1/1.3);if(e.key==='0')fitImage()};
  function destroy(){if(disposed)return;disposed=true;ro.disconnect();window.removeEventListener('keydown',key);dialog.remove()}
