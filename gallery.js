@@ -14,7 +14,8 @@ const exhibitionHost=document.getElementById('virtual-exhibition-action');
 if(!data?.length){const p=document.createElement('p');p.textContent='La collection sera dévoilée prochainement.';gallery.append(p)}
 // Explicit Hero selection takes priority; if unpublished or missing, use the newest published image.
 if(selectedHeroId&&!data?.some(art=>art.id===selectedHeroId&&art.image_path))console.warn('NOF Hero selection unavailable; using fallback.');
-for(const art of [...(data||[])].sort((a,b)=>Number(b.id===selectedHeroId)-Number(a.id===selectedHeroId))){
+if(selectedHeroId){const featured=(data||[]).find(a=>a.id===selectedHeroId&&a.image_path);if(featured){const signed=await sb.storage.from('artworks-images').createSignedUrl(featured.image_path,3600);const heroArtwork=document.querySelector('.hero-art');if(signed.data?.signedUrl&&heroArtwork){heroArtwork.style.backgroundImage='url("'+signed.data.signedUrl.replaceAll('"','%22')+'")';heroArtwork.classList.add('has-artwork');heroArtwork.setAttribute('aria-label','Œuvre à la une : '+featured.title);heroAssigned=true}}}
+for(const art of data||[]){
 const article=document.createElement('article');article.className='work-card reveal visible';
 const frame=document.createElement('div');frame.className='work-image';frame.tabIndex=0;frame.setAttribute('role','button');frame.setAttribute('aria-label','Voir '+art.title);
 const img=document.createElement('img');img.alt='Peinture originale : '+art.title;img.style.display='block';img.style.objectFit='contain';img.style.background='#fff';
