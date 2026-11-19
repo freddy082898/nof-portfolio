@@ -19,7 +19,7 @@ export async function showArtwork3D({title,width_cm,height_cm,front,views=[]}){
  close.onclick=destroy;window.addEventListener('keydown',key);
  try{
   scene=new THREE.Scene();scene.background=new THREE.Color('#e9e6e0');
-  camera=new THREE.PerspectiveCamera(35,1,.1,100);
+  camera=new THREE.OrthographicCamera(-2,2,2,-2,.1,100);
   renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
   renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.outputColorSpace=THREE.SRGBColorSpace;
   renderer.toneMapping=THREE.NoToneMapping;stage.append(renderer.domElement);
@@ -46,20 +46,26 @@ export async function showArtwork3D({title,width_cm,height_cm,front,views=[]}){
   // Subtle edge detail, without a fake thick black frame.
   edgeGeo=new THREE.EdgesGeometry(geo);edgeMat=new THREE.LineBasicMaterial({color:0xb5aa9b,transparent:true,opacity:.55});
   mesh.add(new THREE.LineSegments(edgeGeo,edgeMat));
-  let yaw=-.26,pitch=.08,distance=6.7,targetDistance=6.7,velocityX=0,velocityY=0;
+  let yaw=-.26,pitch=.08,distance=8,targetDistance=8,zoomFactor=1,velocityX=0,velocityY=0;
   const pointers=new Map();let pinchDistance=0;
   stage.addEventListener('pointerdown',e=>{stage.setPointerCapture(e.pointerId);pointers.set(e.pointerId,[e.clientX,e.clientY]);stage.style.cursor='grabbing'});
   stage.addEventListener('pointermove',e=>{
    if(!pointers.has(e.pointerId))return;
    const prev=pointers.get(e.pointerId);pointers.set(e.pointerId,[e.clientX,e.clientY]);
-   if(pointers.size===2){const p=[...pointers.values()];const d=Math.hypot(p[0][0]-p[1][0],p[0][1]-p[1][1]);if(pinchDistance)targetDistance=Math.max(3.2,Math.min(12,targetDistance*pinchDistance/d));pinchDistance=d;return}
+   if(pointers.size===2){const p=[...pointers.values()];const d=Math.hypot(p[0][0]-p[1][0],p[0][1]-p[1][1]);if(pinchDistance)zoomFactor=Math.max(.55,Math.min(2.5,zoomFactor*d/pinchDistance));resize();pinchDistance=d;return}
    pinchDistance=0;velocityX=(e.clientX-prev[0])*.007;velocityY=(e.clientY-prev[1])*.006;yaw+=velocityX;pitch=Math.max(-1.35,Math.min(1.35,pitch+velocityY));
   });
   const release=e=>{pointers.delete(e.pointerId);if(pointers.size<2)pinchDistance=0;if(!pointers.size)stage.style.cursor='grab'};
   stage.addEventListener('pointerup',release);stage.addEventListener('pointercancel',release);
-  stage.addEventListener('wheel',e=>{e.preventDefault();targetDistance=Math.max(3.2,Math.min(12,targetDistance+e.deltaY*.006))},{passive:false});
-  resize=()=>{if(disposed)return;const rect=stage.getBoundingClientRect();if(!rect.width||!rect.height)return;renderer.setSize(rect.width,rect.height,false);camera.aspect=rect.width/rect.height;camera.updateProjectionMatrix();const vfov=THREE.MathUtils.degToRad(camera.fov);const visibleHeight=h/Math.max(.66,rect.height/rect.width);const needed=Math.max(h,visibleHeight,w/camera.aspect);const fit=(needed*.5)/Math.tan(vfov/2);targetDistance=Math.max(targetDistance,fit*1.25);distance=Math.max(distance,targetDistance)};
+  stage.addEventListener('wheel',e=>{e.preventDefault();zoomFactor=Math.max(.55,Math.min(2.5,zoomFactor*(1-e.deltaY*.001)));resize()},{passive:false});
+  resize=()=>{if(disposed)return;const rect=stage.getBoundingClientRect();if(!rect.width||!rect.height)return;renderer.setSize(rect.width,rect.height,false);
+   // Fit the entire rotated canvas in both axes, including its corners.
+   const aspect=rect.width/rect.height,diagonal=Math.hypot(w,h,depth),padding=1.28;
+   const visibleHeight=Math.max(h*padding,diagonal*padding,diagonal*padding/aspect)/zoomFactor;
+   const halfHeight=visibleHeight/2;
+   camera.left=-halfHeight*aspect;camera.right=halfHeight*aspect;camera.top=halfHeight;camera.bottom=-halfHeight;camera.updateProjectionMatrix();
+  };
   observer=new ResizeObserver(resize);observer.observe(stage);resize();
-  function animate(){if(disposed)return;raf=requestAnimationFrame(animate);if(!pointers.size){yaw+=velocityX;pitch=Math.max(-1.35,Math.min(1.35,pitch+velocityY));velocityX*=.89;velocityY*=.89}distance+=(targetDistance-distance)*.12;mesh.rotation.set(pitch,yaw,0);camera.position.set(0,0,distance);camera.lookAt(0,0,0);renderer.render(scene,camera)}animate();
+  function animate(){if(disposed)return;raf=requestAnimationFrame(animate);if(!pointers.size){yaw+=velocityX;pitch=Math.max(-1.35,Math.min(1.35,pitch+velocityY));velocityX*=.89;velocityY*=.89}distance+=(targetDistance-distance)*.12;mesh.rotation.set(pitch,yaw,0);camera.position.set(0,0,8);camera.lookAt(0,0,0);renderer.render(scene,camera)}animate();
  }catch(e){console.error('NOF viewer',e);footer.textContent='La visualisation 3D n’est pas disponible sur cet appareil.'}
 }
